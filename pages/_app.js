@@ -1,6 +1,7 @@
 import React from "react";
 
 import PropTypes from "prop-types";
+import wrapper from "../store/configureStore";
 
 const NodeBrid = ({ Component }) => {
   return (
@@ -12,4 +13,4 @@ const NodeBrid = ({ Component }) => {
 NodeBrid.propTypes = {
   Component: PropTypes.elementType.isRequired,
 };
-export default NodeBrid;
+export default wrapper.withRedux(NodeBrid);
