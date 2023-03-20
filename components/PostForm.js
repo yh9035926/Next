@@ -31,7 +31,7 @@ const PostForm = () => {
       </div>
       <div>
         {imagePaths.map((v) => (
-          <div>
+          <div key={v.id}>
             <img src={v} />
             <div>
               <Button>제거</Button>

@@ -28,6 +28,7 @@ const UserProfile = () => {
       <Card.Meta avatar={<Avatar>yh</Avatar>} title="dnwk" />
       <Button onClick={onLogOut}>로그아웃</Button>
     </Card>
+    
   );
 };
 

@@ -6,8 +6,8 @@ export const initialState = {
         id: 1,
         nickname: "제로초",
       },
-      content: "첫 번째 게시금 #해시태그 #익스프레스",
-      Image: [
+      content: "첫 번째 게시글금 #해시태그 #익스프레스",
+      Images: [
         {
           src: "https://placeimg.com/200/100/any",
         },
@@ -50,7 +50,7 @@ const dummyPost = {
     id: 1,
     nickname: "제로소",
   },
-  Image: [],
+  Images: [],
   Comments: [],
 };
 

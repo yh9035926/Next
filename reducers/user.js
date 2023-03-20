@@ -1,5 +1,5 @@
 export const initialState = {
-  user: { isLoggedIn: false, user: null, signUpData: {}, loginData: {} },
+  user: { isLoggedIn: false, me: null, signUpData: {}, loginData: {} },
 };
 export const loginAction = (data) => {
   return { type: "LOG_IN", data };
@@ -15,14 +15,14 @@ const rootReducer = (state = initialState, action) => {
       return {
         ...state,
         isLoggedIn: true,
-        user: action.data,
+        me: action.data,
       };
 
     case "LOG_OUT":
       return {
         ...state,
         isLoggedIn: false,
-        user: null,
+        me: null,
       };
 
     default:
