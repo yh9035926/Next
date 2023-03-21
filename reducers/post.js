@@ -23,13 +23,13 @@ export const initialState = {
           User: {
             nickname: "nero",
           },
-          Content: "우와 개장판이 나왔군요",
+          content: "우와 개장판이 나왔군요",
         },
         {
           User: {
             nickname: "hero",
           },
-          Content: "만두나 먹어야지",
+          content: "만두나 먹어야지",
         },
       ],
     },

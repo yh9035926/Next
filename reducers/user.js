@@ -1,5 +1,8 @@
 export const initialState = {
-  user: { isLoggedIn: false, me: null, signUpData: {}, loginData: {} },
+  isLoggedIn: false,
+  me: null,
+  signUpData: {},
+  loginData: {},
 };
 export const loginAction = (data) => {
   return { type: "LOG_IN", data };
