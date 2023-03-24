@@ -1,0 +1,1 @@
+{"ast":null,"code":"export default function* rootSaga() {}","map":{"version":3,"names":["rootSaga"],"sources":["C:/Users/com/Desktop/YH/next/sagas/index.js"],"sourcesContent":["export default function* rootSaga(){\r\n    \r\n}"],"mappings":"AAAA,eAAe,UAAUA,QAAQA,CAAA,EAAE,CAEnC"},"metadata":{},"sourceType":"module"}
