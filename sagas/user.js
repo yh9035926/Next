@@ -54,11 +54,11 @@ function* logOut() {
     // const result = yield call(logOutAPI);
     yield put({
       //put은 dipatch
-      type: SIGN_UP_SUCCESS,
+      type: LOG_OUT_SUCCESS,
     });
   } catch (err) {
     yield put({
-      type: SIGN_UP_FAILURE,
+      type: LOG_OUT_FAILURE,
       data: err.response.data,
     });
   }
@@ -75,11 +75,11 @@ function* signUp() {
 
     yield put({
       //put은 dipatch
-      type: LOG_OUT_SUCCESS,
+      type: SIGN_UP_SUCCESS,
     });
   } catch (err) {
     yield put({
-      type: LOG_OUT_FAILURE,
+      type: SIGN_UP_FAILURE,
       data: err.response.data,
     });
   }

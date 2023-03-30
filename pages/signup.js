@@ -4,8 +4,12 @@ import Head from "next/head";
 import { Form, Input, Button, Checkbox } from "antd";
 import { useCallback } from "react";
 import useInput from "../hooks/useInput";
+import { SIGN_UP_REQUEST } from "../type";
+import { useDispatch, useSelector } from "react-redux";
 const Signup = () => {
-  const [id, onChangeId] = useInput();
+  const dispatch = useDispatch();
+  const { signUpLoading } = useSelector((state) => state.user);
+  const [email, onChangeEmail] = useInput();
   const [password, onChangePassword] = useInput();
   const [nickname, onChangenickname] = useInput();
 
@@ -32,8 +36,12 @@ const Signup = () => {
     }
     if (!term) {
       return setTermError(true);
-    } else alert("회원가입이 완료되었습니다");
-  }, [password, passwordCheck, term]);
+    }
+    dispatch({
+      type: SIGN_UP_REQUEST,
+      data: { email, password, nickname },
+    });
+  }, [email, password, passwordCheck, term]);
 
   return (
     <AppLayout>
@@ -42,9 +50,9 @@ const Signup = () => {
       </Head>
       <Form onFinish={onSubmitSignup}>
         <div>
-          <label>아이디</label>
+          <label>이메일</label>
           <br />
-          <Input value={id} onChange={onChangeId} />
+          <Input value={email} onChange={onChangeEmail} type="email" />
         </div>
         <div>
           <label>닉네임</label>
@@ -73,7 +81,7 @@ const Signup = () => {
           {termError && <div>약관에 동의하셔야 합니다</div>}
         </div>
         <div>
-          <Button type="primary" htmlType="submit">
+          <Button type="primary" htmlType="submit" loading={signUpLoading}>
             회원가입
           </Button>
         </div>
