@@ -8,6 +8,9 @@ import {
   SIGN_UP_FAILURE,
   SIGN_UP_REQUEST,
   SIGN_UP_SUCCESS,
+  CHANGE_NICKNAME_FAILURE,
+  CHANGE_NICKNAME_REQUEST,
+  CHANGE_NICKNAME_SUCCESS,
 } from "../type";
 
 export const initialState = {
@@ -20,6 +23,9 @@ export const initialState = {
   signUpLoading: false,
   signUpDone: false,
   signUpError: null,
+  changeNIcknameLoading: false,
+  changeNIcknameDone: false,
+  changeNIcknameError: null,
   me: null,
   signUpData: {},
   loginData: {},
@@ -103,6 +109,26 @@ const rootReducer = (state = initialState, action) => {
         ...state,
         signUpLoading: false,
         signUpError: action.error,
+      };
+
+    case CHANGE_NICKNAME_FAILURE:
+      return {
+        ...state,
+        changeNicknameLoading: true,
+        changeNicknameDone: false,
+        changeNicknameError: null,
+      };
+    case CHANGE_NICKNAME_REQUEST:
+      return {
+        ...state,
+        changeNicknameLoading: false,
+        changeNicknameDone: true,
+      };
+    case CHANGE_NICKNAME_SUCCESS:
+      return {
+        ...state,
+        changeNicknameLoading: false,
+        changeNicknameError: action.error,
       };
     default:
       return state;

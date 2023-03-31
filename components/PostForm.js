@@ -4,9 +4,12 @@ import { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addPost } from "../reducers/post";
 import useInput from "../hooks/useInput";
+import { ADD_POST_REQUEST } from "../type";
 
 const PostForm = () => {
-  const { imagePaths, addPostDone } = useSelector((state) => state.post);
+  const { imagePaths, addPostLoading, addPostDone } = useSelector(
+    (state) => state.post
+  );
 
   const imageInput = useRef();
   const onClickImageUpload = useCallback(() => {
@@ -19,10 +22,11 @@ const PostForm = () => {
     if (addPostDone) {
       setText("");
     }
-  });
+  }, [addPostDone]);
 
   const onSubmit = useCallback(() => {
-    dispatch(addPost);
+    dispatch(addPost(text))
+   
   }, [text]);
   return (
     <Form onFinish={onSubmit}>
