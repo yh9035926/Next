@@ -12,7 +12,7 @@ const CommentForm = ({ post }) => {
     (state) => state.post
   );
   const [commentText, onChangeCommentText, setCommentText] = useInput();
-  
+
   useEffect(() => {
     if (addCommentDone) {
       setCommentText("");

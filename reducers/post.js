@@ -31,13 +31,17 @@ export const initialState = {
       ],
       Comments: [
         {
+          id: shortId.generate(),
           User: {
+            id: shortId.generate(),
             nickname: "nero",
           },
           content: "우와 개장판이 나왔군요",
         },
         {
+          id: shortId.generate(),
           User: {
+            id: shortId.generate(),
             nickname: "hero",
           },
           content: "만두나 먹어야지",
@@ -49,6 +53,7 @@ export const initialState = {
   addPostLoading: false,
   addPostDone: false,
   addPostError: null,
+
   addCommentLoading: false,
   addCommentDone: false,
   addCommentError: null,
@@ -113,21 +118,22 @@ const rootReducer = (state = initialState, action) => {
         addCommentDone: false,
         addCommentError: null,
       };
-    case ADD_COMMENT_SUCCESS: {
+    case ADD_COMMENT_SUCCESS:
       const postIndex = state.mainPosts.findIndex(
         (v) => v.id === action.data.postId
       );
-      const post = { ...state.mainPost[postIndex] };
+      const post = { ...state.mainPosts[postIndex] };
       post.Comments = [dummyComment(action.data.content), ...post.Comments];
       const mainPosts = [...state.mainPosts];
       mainPosts[postIndex] = post;
+
       return {
         ...state,
         mainPosts,
         addCommentLoading: false,
         addCommentDone: true,
       };
-    }
+
     case ADD_COMMENT_FAILURE:
       return {
         ...state,
