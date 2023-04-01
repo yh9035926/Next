@@ -7,6 +7,9 @@ import {
   ADD_COMMENT_FAILURE,
   ADD_COMMENT_REQUEST,
   ADD_COMMENT_SUCCESS,
+  REMOVE_POST_FAILURE,
+  REMOVE_POST_REQUEST,
+  REMOVE_POST_SUCCESS,
 } from "../type";
 
 export const initialState = {
@@ -19,15 +22,9 @@ export const initialState = {
       },
       content: "첫 번째 게시글 #해시태그 #익스프레스",
       Images: [
-        {
-          src: "https://placeimg.com/200/100/1",
-        },
-        {
-          src: "https://placeimg.com/200/100/2",
-        },
-        {
-          src: "https://placeimg.com/200/100/3",
-        },
+        { id: shortId.generate(), src: "https://placeimg.com/200/100/1" },
+        { id: shortId.generate(), src: "https://placeimg.com/200/100/2" },
+        { id: shortId.generate(), src: "https://placeimg.com/200/100/3" },
       ],
       Comments: [
         {
@@ -57,6 +54,10 @@ export const initialState = {
   addCommentLoading: false,
   addCommentDone: false,
   addCommentError: null,
+
+  removePostLoading: false,
+  removePostDone: false,
+  removePostError: null,
 };
 
 export const addPost = (data) => ({
@@ -70,8 +71,8 @@ export const addComment = (data) => ({
 });
 
 const dummyPost = (data) => ({
-  id: shortId.generate(),
-  content: data,
+  id: data.id,
+  content: data.content,
   User: {
     id: 1,
     nickname: "제로소",
@@ -108,9 +109,30 @@ const rootReducer = (state = initialState, action) => {
     case ADD_POST_FAILURE:
       return {
         ...state,
-        addCommentLoading: false,
-        addCommentError: action.error,
+        addPostLoading: false,
+        addPostError: action.error,
       };
+    case REMOVE_POST_REQUEST:
+      return {
+        ...state,
+        removePostLoading: true,
+        removePostDone: false,
+        removePostError: null,
+      };
+    case REMOVE_POST_SUCCESS:
+      return {
+        ...state,
+        mainPosts: state.mainPosts.filter((v) => v.id !== action.data),
+        removePostLoading: false,
+        removePostDone: true,
+      };
+    case REMOVE_POST_FAILURE:
+      return {
+        ...state,
+        removePostLoading: false,
+        removePostError: action.error,
+      };
+
     case ADD_COMMENT_REQUEST:
       return {
         ...state,

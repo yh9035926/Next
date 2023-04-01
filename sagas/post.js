@@ -1,5 +1,7 @@
 import { fork, all, takeLatest, delay, put } from "redux-saga/effects";
 import axios from "axios";
+import shortId from "shortid";
+
 import {
   ADD_COMMENT_FAILURE,
   ADD_COMMENT_REQUEST,
@@ -7,6 +9,11 @@ import {
   ADD_POST_FAILURE,
   ADD_POST_REQUEST,
   ADD_POST_SUCCESS,
+  ADD_POST_TO_ME,
+  REMOVE_POST_FAILURE,
+  REMOVE_POST_OF_ME,
+  REMOVE_POST_REQUEST,
+  REMOVE_POST_SUCCESS,
 } from "../type";
 
 function addPostAPI(data) {
@@ -18,10 +25,18 @@ function* addPost(action) {
     yield delay(1000);
 
     //const result = yield call(addPostAPI, action.data);
+    const id = shortId.generate();
     yield put({
       //put은 dipatch
       type: ADD_POST_SUCCESS,
-      data: action.data,
+      data: {
+        id,
+        content: action.data,
+      },
+    });
+    yield put({
+      type: ADD_POST_TO_ME,
+      data: id,
     });
   } catch (err) {
     yield put({
@@ -33,6 +48,38 @@ function* addPost(action) {
 
 function* watchAddPost() {
   yield takeLatest(ADD_POST_REQUEST, addPost); //마지막 것만
+  //throttle("ADD_POST_REQUEST", addPost,2000) 2초 동안 1번 실행
+}
+
+function removePostAPI(data) {
+  return axios.delete("/api/post", data);
+}
+
+function* removePost(action) {
+  try {
+    yield delay(1000);
+
+    //const result = yield call(addPostAPI, action.data);
+    yield put({
+      //put은 dipatch
+      type: REMOVE_POST_SUCCESS,
+      data: action.data,
+    });
+
+    yield put({
+      type: REMOVE_POST_OF_ME,
+      data: action.data,
+    });
+  } catch (err) {
+    yield put({
+      type: REMOVE_POST_FAILURE,
+      data: err.response.data,
+    });
+  }
+}
+
+function* watchRemovePost() {
+  yield takeLatest(REMOVE_POST_REQUEST, removePost); //마지막 것만
   //throttle("ADD_POST_REQUEST", addPost,2000) 2초 동안 1번 실행
 }
 
@@ -64,5 +111,5 @@ function* watchAddComment() {
 }
 
 export default function* postSaga() {
-  yield all([fork(watchAddPost), fork(watchAddComment)]);
+  yield all([fork(watchAddPost), fork(watchAddComment), fork(watchRemovePost)]);
 }

@@ -11,6 +11,8 @@ import {
   CHANGE_NICKNAME_FAILURE,
   CHANGE_NICKNAME_REQUEST,
   CHANGE_NICKNAME_SUCCESS,
+  ADD_POST_TO_ME,
+  REMOVE_POST_OF_ME,
 } from "../type";
 
 export const initialState = {
@@ -35,9 +37,9 @@ const dummyUser = (data) => ({
   ...data,
   nickname: "yh",
   id: 1,
-  Posts: [],
-  Followings: [],
-  Followers: [],
+  Posts: [{ id: 1 }],
+  Followings: [{ nickname: "우자" }],
+  Followers: [{ nickname: "우자" }],
 });
 export const loginRequestAction = (data) => {
   return { type: LOG_IN_REQUEST, data };
@@ -129,6 +131,19 @@ const rootReducer = (state = initialState, action) => {
         ...state,
         changeNicknameLoading: false,
         changeNicknameError: action.error,
+      };
+    case ADD_POST_TO_ME:
+      return {
+        ...state,
+        me: { ...state.me, Posts: [{ id: action.data }, ...state.me.Posts] },
+      };
+    case REMOVE_POST_OF_ME:
+      return {
+        ...state,
+        me: {
+          ...state.me,
+          Posts: state.me.Posts.filter((v) => v.id !== action.data),
+        },
       };
     default:
       return state;
