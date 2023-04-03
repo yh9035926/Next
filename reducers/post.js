@@ -10,43 +10,16 @@ import {
   REMOVE_POST_FAILURE,
   REMOVE_POST_REQUEST,
   REMOVE_POST_SUCCESS,
+  LOAD_POST_FAILURE,
+  LOAD_POST_REQUEST,
+  LOAD_POST_SUCCESS,
 } from "../type";
+import faker from "faker";
 
 export const initialState = {
-  mainPosts: [
-    {
-      id: 1,
-      User: {
-        id: 1,
-        nickname: "제로초",
-      },
-      content: "첫 번째 게시글 #해시태그 #익스프레스",
-      Images: [
-        { id: shortId.generate(), src: "https://placeimg.com/200/100/1" },
-        { id: shortId.generate(), src: "https://placeimg.com/200/100/2" },
-        { id: shortId.generate(), src: "https://placeimg.com/200/100/3" },
-      ],
-      Comments: [
-        {
-          id: shortId.generate(),
-          User: {
-            id: shortId.generate(),
-            nickname: "nero",
-          },
-          content: "우와 개장판이 나왔군요",
-        },
-        {
-          id: shortId.generate(),
-          User: {
-            id: shortId.generate(),
-            nickname: "hero",
-          },
-          content: "만두나 먹어야지",
-        },
-      ],
-    },
-  ],
+  mainPosts: [],
   imagePaths: [],
+  hasMorePost: true,
   addPostLoading: false,
   addPostDone: false,
   addPostError: null,
@@ -58,7 +31,36 @@ export const initialState = {
   removePostLoading: false,
   removePostDone: false,
   removePostError: null,
+
+  loadPostLoading: false,
+  loadPostDone: false,
+  loadPostError: null,
 };
+export const generateDummyPost = (number) =>
+  Array(number)
+    .fill()
+    .map(() => ({
+      id: shortId.generate(),
+      User: {
+        id: shortId.generate(),
+        nickname: faker.name.findName(),
+      },
+      content: faker.lorem.paragraph(),
+      Image: [
+        {
+          src: faker.image.image(),
+        },
+      ],
+      Comments: [
+        {
+          User: {
+            id: shortId.generate(),
+            nickname: faker.name.findName(),
+          },
+          content: faker.lorem.sentence(),
+        },
+      ],
+    }));
 
 export const addPost = (data) => ({
   type: ADD_POST_REQUEST,
@@ -102,11 +104,29 @@ const rootReducer = (state = initialState, action) => {
         draft.mainPosts.unshift(dummyPost(action.data));
         draft.addPostLoading = false;
         draft.addPostDone = true;
+        draft.hasMorePost = draft.mainPosts.length < 50;
         break;
       case ADD_POST_FAILURE:
         draft.addPostLoading = false;
         draft.addPostError = action.error;
         break;
+
+      case LOAD_POST_REQUEST:
+        draft.loadPostLoading = true;
+        draft.loadPostDone = false;
+        draft.loadPostError = null;
+        break;
+      case LOAD_POST_SUCCESS:
+        draft.mainPosts = action.data.concat(draft.mainPosts);
+        draft.loadPostLoading = false;
+        draft.loadPostDone = true;
+        draft.hasMorePost = draft.mainPosts.length < 50;
+        break;
+      case LOAD_POST_FAILURE:
+        draft.loadPostLoading = false;
+        draft.loadPostError = action.error;
+        break;
+
       case REMOVE_POST_REQUEST:
         draft.removePostLoading = true;
         draft.removePostDone = false;
