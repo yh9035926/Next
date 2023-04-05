@@ -46,7 +46,7 @@ export const generateDummyPost = (number) =>
         nickname: faker.name.findName(),
       },
       content: faker.lorem.paragraph(),
-      Image: [
+      Images: [
         {
           src: faker.image.image(),
         },

@@ -8,6 +8,12 @@ import {
   SIGN_UP_FAILURE,
   SIGN_UP_REQUEST,
   SIGN_UP_SUCCESS,
+  FOLLOW_REQUEST,
+  UNFOLLOW_REQUEST,
+  FOLLOW_SUCCESS,
+  FOLLOW_FAILURE,
+  UNFOLLOW_SUCCESS,
+  UNFOLLOW_FAILURE,
 } from "../type";
 
 import {
@@ -84,6 +90,50 @@ function* signUp() {
     });
   }
 }
+
+function followAPI(data) {
+  return axios.post("/api/follow", data);
+}
+
+function* follow(action) {
+  try {
+    // const result = yield call(logInAPI, action.data);
+    yield delay(1000);
+    yield put({
+      //put은 dipatch
+
+      type: FOLLOW_SUCCESS,
+      data: action.data,
+    });
+  } catch (err) {
+    yield put({
+      type: FOLLOW_FAILURE,
+      data: err.response.data,
+    });
+  }
+}
+function unfollowAPI(data) {
+  return axios.post("/api/unfollow", data);
+}
+
+function* unfollow(action) {
+  try {
+    // const result = yield call(logInAPI, action.data);
+    yield delay(1000);
+    yield put({
+      //put은 dipatch
+
+      type: UNFOLLOW_SUCCESS,
+      data: action.data,
+    });
+  } catch (err) {
+    yield put({
+      type: UNFOLLOW_FAILURE,
+      data: err.response.data,
+    });
+  }
+}
+
 function* watchLogin() {
   yield takeEvery(LOG_IN_REQUEST, logIn); //반복
 }
@@ -95,7 +145,19 @@ function* watchLogout() {
 function* watchSingUp() {
   yield takeLatest(SIGN_UP_REQUEST, signUp); //첫 번째 것만
 }
+function* watchFollow() {
+  yield takeEvery(FOLLOW_REQUEST, follow); //반복
+}
+function* watchUnfollow() {
+  yield takeEvery(UNFOLLOW_REQUEST, unfollow); //반복
+}
 
 export default function* userSaga() {
-  yield all([fork(watchLogin), fork(watchLogout), fork(watchSingUp)]);
+  yield all([
+    fork(watchLogin),
+    fork(watchLogout),
+    fork(watchSingUp),
+    fork(watchFollow),
+    fork(watchUnfollow),
+  ]);
 }
