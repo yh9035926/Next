@@ -4,7 +4,6 @@ import { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addPost } from "../reducers/post";
 import useInput from "../hooks/useInput";
-import { ADD_POST_REQUEST } from "../type";
 
 const PostForm = () => {
   const { imagePaths, addPostLoading, addPostDone } = useSelector(
