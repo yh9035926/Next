@@ -25,7 +25,7 @@ import {
 export const initialState = {
   logInLoading: false,
   logInDone: false,
-  loginError: null,
+  logInError: null,
   logOutLoading: false,
   logOutDone: false,
   logOutError: null,
@@ -73,7 +73,7 @@ const rootReducer = (state = initialState, action) => {
       case LOG_IN_SUCCESS:
         draft.logInLoading = false;
         draft.logInDone = true;
-        draft.me = dummyUser(action.data);
+        draft.me = action.data;
         break;
       case LOG_IN_FAILURE:
         draft.logInLoading = false;

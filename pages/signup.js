@@ -9,13 +9,19 @@ import { SIGN_UP_REQUEST } from "../type";
 import { useDispatch, useSelector } from "react-redux";
 const Signup = () => {
   const dispatch = useDispatch();
-  const { signUpLoading, signUpDone, signUpError } = useSelector(
+  const { signUpLoading, signUpDone, signUpError, logInDone } = useSelector(
     (state) => state.user
   );
 
   useEffect(() => {
+    if (logInDone) {
+      Router.replace("/"); //뤼로가기 했을때 그 페이지 안 나옴
+    }
+  }, [logInDone]);
+
+  useEffect(() => {
     if (signUpDone) {
-      Router.push("/");
+      Router.replace("/");
     }
   }, [signUpDone]);
 
