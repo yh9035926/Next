@@ -14,6 +14,9 @@ import {
   FOLLOW_FAILURE,
   UNFOLLOW_SUCCESS,
   UNFOLLOW_FAILURE,
+  LOAD_MY_INFO_REQUEST,
+  LOAD_MY_INFO_SUCCESS,
+  LOAD_MY_INFO_FAILURE,
 } from "../type";
 
 import {
@@ -134,6 +137,27 @@ function* unfollow(action) {
   }
 }
 
+function loadMyInfoAPI() {
+  return axios.get("/user");
+}
+
+function* loadMyInfo(action) {
+  try {
+    const result = yield call(loadMyInfoAPI, action.data);
+    yield put({
+      //put은 dipatch
+
+      type: LOAD_MY_INFO_SUCCESS,
+      data: result.data,
+    });
+  } catch (err) {
+    yield put({
+      type: LOAD_MY_INFO_FAILURE,
+      error: err.response.data,
+    });
+  }
+}
+
 function* watchLogin() {
   yield takeEvery(LOG_IN_REQUEST, logIn); //반복
 }
@@ -152,6 +176,10 @@ function* watchUnfollow() {
   yield takeEvery(UNFOLLOW_REQUEST, unfollow); //반복
 }
 
+function* watchLoadMyInfo() {
+  yield takeEvery(LOAD_MY_INFO_REQUEST, loadMyInfo); //반복
+}
+
 export default function* userSaga() {
   yield all([
     fork(watchLogin),
@@ -159,5 +187,6 @@ export default function* userSaga() {
     fork(watchSingUp),
     fork(watchFollow),
     fork(watchUnfollow),
+    fork(watchLoadMyInfo),
   ]);
 }

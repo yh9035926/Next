@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import AppLayout from "../components/AppLayout";
 import PostCard from "../components/PostCard";
 import PostForm from "../components/PostForm";
-import { LOAD_POST_REQUEST } from "../type";
+import { LOAD_POST_REQUEST, LOAD_MY_INFO_REQUEST } from "../type";
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -13,6 +13,9 @@ const Home = () => {
   );
 
   useEffect(() => {
+    dispatch({
+      type: LOAD_MY_INFO_REQUEST,
+    });
     dispatch({
       type: LOAD_POST_REQUEST,
     });

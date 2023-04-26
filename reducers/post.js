@@ -1,4 +1,3 @@
-import shortId from "shortid";
 import produce from "immer";
 import {
   ADD_POST_FAILURE,
@@ -14,7 +13,6 @@ import {
   LOAD_POST_REQUEST,
   LOAD_POST_SUCCESS,
 } from "../type";
-import faker from "faker";
 
 export const initialState = {
   mainPosts: [],
@@ -36,31 +34,6 @@ export const initialState = {
   loadPostDone: false,
   loadPostError: null,
 };
-export const generateDummyPost = (number) =>
-  Array(number)
-    .fill()
-    .map(() => ({
-      id: shortId.generate(),
-      User: {
-        id: shortId.generate(),
-        nickname: faker.name.findName(),
-      },
-      content: faker.lorem.paragraph(),
-      Images: [
-        {
-          src: faker.image.image(),
-        },
-      ],
-      Comments: [
-        {
-          User: {
-            id: shortId.generate(),
-            nickname: faker.name.findName(),
-          },
-          content: faker.lorem.sentence(),
-        },
-      ],
-    }));
 
 export const addPost = (data) => ({
   type: ADD_POST_REQUEST,

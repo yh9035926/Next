@@ -20,9 +20,15 @@ import {
   UNFOLLOW_REQUEST,
   UNFOLLOW_SUCCESS,
   UNFOLLOW_FAILURE,
+  LOAD_MY_INFO_FAILURE,
+  LOAD_MY_INFO_REQUEST,
+  LOAD_MY_INFO_SUCCESS,
 } from "../type";
 
 export const initialState = {
+  loadMyInfoLoading: false,
+  loadMyInfoDone: false,
+  loadMyInfoError: null,
   logInLoading: false,
   logInDone: false,
   logInError: null,
@@ -66,7 +72,7 @@ const rootReducer = (state = initialState, action) => {
   return produce(state, (draft) => {
     switch (action.type) {
       case LOG_IN_REQUEST:
-        draft.loginError = null;
+        draft.logInError = null;
         draft.logInLoading = true;
         draft.logInDone = false;
         break;
@@ -77,7 +83,21 @@ const rootReducer = (state = initialState, action) => {
         break;
       case LOG_IN_FAILURE:
         draft.logInLoading = false;
-        draft.loginError = action.error;
+        draft.logInError = action.error;
+        break;
+      case LOAD_MY_INFO_REQUEST:
+        draft.loadMyInfoError = null;
+        draft.loadMyInfoLoading = true;
+        draft.loadMyInfoDone = false;
+        break;
+      case LOAD_MY_INFO_SUCCESS:
+        draft.loadMyInfoLoading = false;
+        draft.me = action.data;
+        draft.loadMyInfoDone = true;
+        break;
+      case LOAD_MY_INFO_FAILURE:
+        draft.loadMyInfoLoading = false;
+        draft.loadMyInfoError = action.error;
         break;
       case LOG_OUT_REQUEST:
         draft.logOutLoading = true;
