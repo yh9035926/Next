@@ -85,6 +85,8 @@ const rootReducer = (state = initialState, action) => {
         draft.logInLoading = false;
         draft.logInError = action.error;
         break;
+      //-------------------------------------------------------------------
+
       case LOAD_MY_INFO_REQUEST:
         draft.loadMyInfoError = null;
         draft.loadMyInfoLoading = true;
@@ -99,6 +101,8 @@ const rootReducer = (state = initialState, action) => {
         draft.loadMyInfoLoading = false;
         draft.loadMyInfoError = action.error;
         break;
+      //-------------------------------------------------------------------
+
       case LOG_OUT_REQUEST:
         draft.logOutLoading = true;
         draft.logOutDone = false;
@@ -113,6 +117,8 @@ const rootReducer = (state = initialState, action) => {
         draft.logOutLoading = false;
         draft.logOutError = action.error;
         break;
+      //-------------------------------------------------------------------
+
       case FOLLOW_REQUEST:
         draft.followError = null;
         draft.followLoading = true;
@@ -127,6 +133,8 @@ const rootReducer = (state = initialState, action) => {
         draft.followLoading = false;
         draft.followError = action.error;
         break;
+      //-------------------------------------------------------------------
+
       case UNFOLLOW_REQUEST:
         draft.unFollowError = null;
         draft.unFollowLoading = true;
@@ -143,6 +151,8 @@ const rootReducer = (state = initialState, action) => {
         draft.unFollowLoading = false;
         draft.unFollowError = action.error;
         break;
+      //-------------------------------------------------------------------
+
       case SIGN_UP_REQUEST:
         draft.signUpLoading = true;
         draft.signUpDone = false;
@@ -155,6 +165,7 @@ const rootReducer = (state = initialState, action) => {
       case SIGN_UP_FAILURE:
         draft.signUpLoading = false;
         draft.signUpError = action.error;
+        //-------------------------------------------------------------------
         break;
       case CHANGE_NICKNAME_FAILURE:
         draft.changeNicknameLoading = true;
@@ -168,6 +179,8 @@ const rootReducer = (state = initialState, action) => {
       case CHANGE_NICKNAME_SUCCESS:
         draft.changeNicknameLoading = false;
         break;
+      //-------------------------------------------------------------------
+
       case ADD_POST_TO_ME:
         draft.me.Posts.unshift({ id: action.data });
         break;

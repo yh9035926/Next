@@ -9,6 +9,9 @@ import {
   ADD_POST_REQUEST,
   ADD_POST_SUCCESS,
   ADD_POST_TO_ME,
+  LIKE_POST_FAILURE,
+  LIKE_POST_REQUEST,
+  LIKE_POST_SUCCESS,
   LOAD_POST_FAILURE,
   LOAD_POST_REQUEST,
   LOAD_POST_SUCCESS,
@@ -16,8 +19,36 @@ import {
   REMOVE_POST_OF_ME,
   REMOVE_POST_REQUEST,
   REMOVE_POST_SUCCESS,
+  UNLIKE_POST_FAILURE,
+  UNLIKE_POST_REQUEST,
+  UNLIKE_POST_SUCCESS,
 } from "../type";
 
+function loadPostAPI() {
+  return axios.get(`/posts`);
+}
+
+function* loadPost(action) {
+  try {
+    const result = yield call(loadPostAPI);
+    yield put({
+      //put은 dipatch
+      type: LOAD_POST_SUCCESS,
+      data: result.data,
+    });
+  } catch (err) {
+    yield put({
+      type: LOAD_POST_FAILURE,
+      data: err.response.data,
+    });
+  }
+}
+
+function* watchLoadPost() {
+  yield takeLatest(LOAD_POST_REQUEST, loadPost); //마지막 것만
+  //throttle("ADD_POST_REQUEST", addPost,2000) 2초 동안 1번 실행 REQUSET는 보내짐
+}
+//-------------------------------------------------------------
 function addPostAPI(data) {
   return axios.post("/post", { content: data });
 }
@@ -46,9 +77,10 @@ function* watchAddPost() {
   yield takeLatest(ADD_POST_REQUEST, addPost); //마지막 것만
   //throttle("ADD_POST_REQUEST", addPost,2000) 2초 동안 1번 실행
 }
+//-------------------------------------------------------------
 
 function removePostAPI(data) {
-  return axios.delete("/api/post", data);
+  return axios.delete("/post", data);
 }
 
 function* removePost(action) {
@@ -78,6 +110,7 @@ function* watchRemovePost() {
   yield takeLatest(REMOVE_POST_REQUEST, removePost); //마지막 것만
   //throttle("ADD_POST_REQUEST", addPost,2000) 2초 동안 1번 실행
 }
+//-------------------------------------------------------------
 
 function addCommentAPI(data) {
   return axios.post(`/post/${data.postId}/comment`, data);
@@ -104,30 +137,59 @@ function* watchAddComment() {
   yield takeLatest(ADD_COMMENT_REQUEST, addComment); //마지막 것만
   //throttle("ADD_POST_REQUEST", addPost,2000) 2초 동안 1번 실행
 }
+//-------------------------------------------------------------
 
-function loadPostAPI(data) {
-  return axios.get(`/posts`, data);
+function likePostAPI(data) {
+  return axios.patch(`/post/${data}/like`); //patch 일부분 수정
 }
 
-function* loadPost(action) {
+function* likePost(action) {
   try {
-    const result = yield call(loadPostAPI, action.data);
+    const result = yield call(likePostAPI, action.data);
     yield put({
       //put은 dipatch
-      type: LOAD_POST_SUCCESS,
+      type: LIKE_POST_SUCCESS,
       data: result.data,
     });
   } catch (err) {
+    console.error(err);
     yield put({
-      type: LOAD_POST_FAILURE,
+      type: LIKE_POST_FAILURE,
       data: err.response.data,
     });
   }
 }
 
-function* watchloadPost() {
-  yield takeLatest(LOAD_POST_REQUEST, loadPost); //마지막 것만
-  //throttle("ADD_POST_REQUEST", addPost,2000) 2초 동안 1번 실행 REQUSET는 보내짐
+function* watchLikePost() {
+  yield takeLatest(LIKE_POST_REQUEST, likePost); //마지막 것만
+  //throttle("ADD_POST_REQUEST", addPost,2000) 2초 동안 1번 실행
+}
+//-------------------------------------------------------------
+
+function unlikePostAPI(data) {
+  return axios.delete(`/post/${data}/like`);
+}
+
+function* unlikePost(action) {
+  try {
+    const result = yield call(unlikePostAPI, action.data);
+    yield put({
+      //put은 dipatch
+      type: UNLIKE_POST_SUCCESS,
+      data: result.data,
+    });
+  } catch (err) {
+    console.error(err);
+    yield put({
+      type: UNLIKE_POST_FAILURE,
+      data: err.response.data,
+    });
+  }
+}
+
+function* watchUnlikePost() {
+  yield takeLatest(UNLIKE_POST_REQUEST, unlikePost); //마지막 것만
+  //throttle("ADD_POST_REQUEST", addPost,2000) 2초 동안 1번 실행
 }
 
 export default function* postSaga() {
@@ -135,6 +197,8 @@ export default function* postSaga() {
     fork(watchAddPost),
     fork(watchAddComment),
     fork(watchRemovePost),
-    fork(watchloadPost),
+    fork(watchLoadPost),
+    fork(watchLikePost),
+    fork(watchUnlikePost),
   ]);
 }

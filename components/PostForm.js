@@ -24,8 +24,7 @@ const PostForm = () => {
   }, [addPostDone]);
 
   const onSubmit = useCallback(() => {
-    dispatch(addPost(text))
-   
+    dispatch(addPost(text));
   }, [text]);
   return (
     <Form onFinish={onSubmit}>

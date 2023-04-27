@@ -136,7 +136,7 @@ function* unfollow(action) {
     });
   }
 }
-
+//-------------------------------------------------------------------
 function loadMyInfoAPI() {
   return axios.get("/user");
 }
