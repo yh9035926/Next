@@ -17,6 +17,9 @@ import {
   LOAD_MY_INFO_REQUEST,
   LOAD_MY_INFO_SUCCESS,
   LOAD_MY_INFO_FAILURE,
+  CHANGE_NICKNAME_REQUEST,
+  CHANGE_NICKNAME_SUCCESS,
+  CHANGE_NICKNAME_FAILURE,
 } from "../type";
 
 import {
@@ -59,9 +62,7 @@ function logOutAPI() {
 
 function* logOut() {
   try {
-    yield delay(1000);
-
-    // const result = yield call(logOutAPI);
+    yield call(logOutAPI);
     yield put({
       //put은 dipatch
       type: LOG_OUT_SUCCESS,
@@ -157,6 +158,28 @@ function* loadMyInfo(action) {
     });
   }
 }
+//-------------------------------------------------------------------
+
+function changeNicknameAPI(data) {
+  return axios.patch("/user/nickname", { nickname: data });
+}
+
+function* changeNickname(action) {
+  try {
+    const result = yield call(changeNicknameAPI, action.data);
+    yield put({
+      //put은 dipatch
+
+      type: CHANGE_NICKNAME_SUCCESS,
+      data: result.data,
+    });
+  } catch (err) {
+    yield put({
+      type: CHANGE_NICKNAME_FAILURE,
+      error: err.response.data,
+    });
+  }
+}
 
 function* watchLogin() {
   yield takeEvery(LOG_IN_REQUEST, logIn); //반복
@@ -180,8 +203,13 @@ function* watchLoadMyInfo() {
   yield takeEvery(LOAD_MY_INFO_REQUEST, loadMyInfo); //반복
 }
 
+function* watchChangeNickname() {
+  yield takeEvery(CHANGE_NICKNAME_REQUEST, changeNickname); //반복
+}
+
 export default function* userSaga() {
   yield all([
+    fork(watchChangeNickname),
     fork(watchLogin),
     fork(watchLogout),
     fork(watchSingUp),

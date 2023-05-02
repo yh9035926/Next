@@ -165,19 +165,22 @@ const rootReducer = (state = initialState, action) => {
       case SIGN_UP_FAILURE:
         draft.signUpLoading = false;
         draft.signUpError = action.error;
-        //-------------------------------------------------------------------
         break;
-      case CHANGE_NICKNAME_FAILURE:
+      //-------------------------------------------------------------------
+
+      case CHANGE_NICKNAME_REQUEST:
         draft.changeNicknameLoading = true;
         draft.changeNicknameDone = false;
         draft.changeNicknameError = null;
         break;
-      case CHANGE_NICKNAME_REQUEST:
+      case CHANGE_NICKNAME_SUCCESS:
+        draft.me.nickname = action.data.nickname;
         draft.changeNicknameLoading = false;
         draft.changeNicknameDone = true;
         break;
-      case CHANGE_NICKNAME_SUCCESS:
+      case CHANGE_NICKNAME_FAILURE:
         draft.changeNicknameLoading = false;
+        draft.changeNicknameError = action.error;
         break;
       //-------------------------------------------------------------------
 

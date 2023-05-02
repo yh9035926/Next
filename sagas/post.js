@@ -24,13 +24,14 @@ import {
   UNLIKE_POST_SUCCESS,
 } from "../type";
 
-function loadPostAPI() {
-  return axios.get(`/posts`);
+function loadPostAPI(data) {
+  return axios.get(`/posts`, data);
 }
 
 function* loadPost(action) {
   try {
-    const result = yield call(loadPostAPI);
+    console.log("로드 사가 실행");
+    const result = yield call(loadPostAPI, action.data);
     yield put({
       //put은 dipatch
       type: LOAD_POST_SUCCESS,
@@ -80,18 +81,16 @@ function* watchAddPost() {
 //-------------------------------------------------------------
 
 function removePostAPI(data) {
-  return axios.delete("/post", data);
+  return axios.delete(`/post/${data}`);
 }
 
 function* removePost(action) {
   try {
-    yield delay(1000);
-
-    //const result = yield call(removePostAPI, action.data);
+    const result = yield call(removePostAPI, action.data);
     yield put({
       //put은 dipatch
       type: REMOVE_POST_SUCCESS,
-      data: action.data,
+      data: result.data,
     });
 
     yield put({

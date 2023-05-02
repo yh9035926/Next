@@ -18,6 +18,7 @@ import {
   UNLIKE_POST_REQUEST,
   UNLIKE_POST_SUCCESS,
   UNLIKE_POST_FAILURE,
+
 } from "../type";
 
 export const initialState = {
@@ -47,6 +48,10 @@ export const initialState = {
   loadPostLoading: false,
   loadPostDone: false,
   loadPostError: null,
+
+  changeNicknameLoading: false,
+  changeNicknameDone: false,
+  changeNicknameError: null,
 };
 
 export const addPost = (data) => ({
@@ -136,7 +141,9 @@ const rootReducer = (state = initialState, action) => {
         draft.removePostError = null;
         break;
       case REMOVE_POST_SUCCESS:
-        draft.mainPosts = draft.mainPosts.filter((v) => v.id !== action.data);
+        draft.mainPosts = draft.mainPosts.filter(
+          (v) => v.id !== action.data.PostId
+        );
         draft.removePostLoading = false;
         draft.removePostDone = true;
         break;
@@ -146,6 +153,7 @@ const rootReducer = (state = initialState, action) => {
         break;
       //-------------------------------------------------------------------
 
+  
       case ADD_COMMENT_REQUEST:
         draft.addCommentLoading = true;
         draft.addCommentDone = false;
