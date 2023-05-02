@@ -25,6 +25,7 @@ export const initialState = {
   mainPosts: [],
   imagePaths: [],
   hasMorePost: true,
+
   addPostLoading: false,
   addPostDone: false,
   addPostError: null,
@@ -75,13 +76,14 @@ const rootReducer = (state = initialState, action) => {
       case LOAD_POST_SUCCESS:
         draft.loadPostLoading = false;
         draft.loadPostDone = true;
-        draft.mainPosts = draft.mainPosts.concat(action.data); // action.data를 cconcat해서 기존 데이터에 추가
+        draft.mainPosts = draft.mainPosts.concat(action.data); // action.data를 concat해서 기존 데이터에 추가
         draft.hasMorePost = draft.mainPosts.length < 30;
         break;
       case LOAD_POST_FAILURE:
         draft.loadPostLoading = false;
         draft.loadPostError = action.error;
         break;
+ 
       //-------------------------------------------------------------------
       case ADD_POST_REQUEST:
         draft.addPostLoading = true;
@@ -153,7 +155,6 @@ const rootReducer = (state = initialState, action) => {
         break;
       //-------------------------------------------------------------------
 
-  
       case ADD_COMMENT_REQUEST:
         draft.addCommentLoading = true;
         draft.addCommentDone = false;
