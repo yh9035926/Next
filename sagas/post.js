@@ -22,6 +22,9 @@ import {
   UNLIKE_POST_FAILURE,
   UNLIKE_POST_REQUEST,
   UNLIKE_POST_SUCCESS,
+  UPLOAD_IMAGES_FAILURE,
+  UPLOAD_IMAGES_REQUEST,
+  UPLOAD_IMAGES_SUCCESS,
 } from "../type";
 
 function loadPostAPI(data) {
@@ -51,7 +54,7 @@ function* watchLoadPost() {
 }
 //-------------------------------------------------------------
 function addPostAPI(data) {
-  return axios.post("/post", { content: data });
+  return axios.post("/post", data);
 }
 
 function* addPost(action) {
@@ -76,6 +79,31 @@ function* addPost(action) {
 
 function* watchAddPost() {
   yield takeLatest(ADD_POST_REQUEST, addPost); //마지막 것만
+  //throttle("ADD_POST_REQUEST", addPost,2000) 2초 동안 1번 실행
+}
+//-------------------------------------------------------------
+function uploadImagesAPI(data) {
+  return axios.post("/post/images", data);
+}
+
+function* uploadImages(action) {
+  try {
+    const result = yield call(uploadImagesAPI, action.data);
+    yield put({
+      //put은 dipatch
+      type: UPLOAD_IMAGES_SUCCESS,
+      data: result.data,
+    });
+  } catch (err) {
+    yield put({
+      type: UPLOAD_IMAGES_FAILURE,
+      data: err.response.data,
+    });
+  }
+}
+
+function* watchuploadImages() {
+  yield takeLatest(UPLOAD_IMAGES_REQUEST, uploadImages); //마지막 것만
   //throttle("ADD_POST_REQUEST", addPost,2000) 2초 동안 1번 실행
 }
 //-------------------------------------------------------------
@@ -199,5 +227,6 @@ export default function* postSaga() {
     fork(watchLoadPost),
     fork(watchLikePost),
     fork(watchUnlikePost),
+    fork(watchuploadImages),
   ]);
 }

@@ -4,6 +4,7 @@ import { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addPost } from "../reducers/post";
 import useInput from "../hooks/useInput";
+import { ADD_POST_REQUEST, REMOVE_IMAGE, UPLOAD_IMAGES_REQUEST } from "../type";
 
 const PostForm = () => {
   const { imagePaths, addPostLoading, addPostDone } = useSelector(
@@ -23,30 +24,67 @@ const PostForm = () => {
     }
   }, [addPostDone]);
 
+  const onChangeImages = useCallback((e) => {
+    console.log("images", e.target.files);
+    const imageFormData = new FormData();
+    [].forEach.call(e.target.files, (f) => {
+      imageFormData.append("image", f);
+      dispatch({
+        type: UPLOAD_IMAGES_REQUEST,
+        data: imageFormData,
+      });
+    });
+  });
+
+  const onRemoveImage = useCallback((index) => () => {
+    dispatch({
+      type: REMOVE_IMAGE,
+      data: index,
+    });
+  });
+
   const onSubmit = useCallback(() => {
-    dispatch(addPost(text));
-  }, [text]);
+    if (!text || !text.trim()) {
+      return alert("게시글을 작성하세요.");
+    }
+    const formData = new FormData();
+    imagePaths.forEach((p) => {
+      formData.append("image", p); //req.body.image
+    });
+    formData.append("content", text);
+    return dispatch({
+      type: ADD_POST_REQUEST,
+      data: formData,
+    });
+  }, [text, imagePaths]);
   return (
-    <Form onFinish={onSubmit}>
+    <Form encType="multipart/form-data" onFinish={onSubmit}>
       <Input.TextArea value={text} onChange={onChangeText} />
       <div>
-        <input type="file" multiple hidden ref={imageInput} />
+        <input
+          type="file"
+          name="image"
+          multiple
+          hidden
+          ref={imageInput}
+          onChange={onChangeImages}
+        />
         <Button onClick={onClickImageUpload}>이미지 업로드</Button>
         <Button type="primary" htmlType="submit">
           짹쨱
         </Button>
       </div>
       <div>
-        {imagePaths.map((v) => (
+        {imagePaths.map((v, i) => (
           <div key={v.id}>
-            <img src={v} />
+            <img src={`http://localhost:3065/${v}`} />
             <div>
-              <Button>제거</Button>
+              <Button onClick={onRemoveImage(i)}>제거</Button>
             </div>
           </div>
         ))}
       </div>
-    </Form>
+    </Form> //map 안에 넣고 싶으면 ()넣어야함
   );
 };
 
