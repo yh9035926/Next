@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 const PostCardContent = ({ postData }) => {
   return (
     <div>
-      {postData.split(/(#[^\s#]+)/g).map((v, i) => {
+      {postData.split(/(#[^\s#]+)/g).map((v, i) => {//해시태그 추출
         if (v.match(/(#[^\s#]+)/)) {
           return (
             <Link href={`/hashtag/${v.slice(1)}`} key={i}>

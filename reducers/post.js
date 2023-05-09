@@ -22,6 +22,9 @@ import {
   UPLOAD_IMAGES_SUCCESS,
   UPLOAD_IMAGES_FAILURE,
   REMOVE_IMAGE,
+  RETWEET_FAILURE,
+  RETWEET_SUCCESS,
+  RETWEET_REQUEST,
 } from "../type";
 
 export const initialState = {
@@ -52,6 +55,10 @@ export const initialState = {
   removePostLoading: false,
   removePostDone: false,
   removePostError: null,
+
+  retweetLoading: false,
+  retweetDone: false,
+  retweetError: null,
 
   loadPostLoading: false,
   loadPostDone: false,
@@ -94,6 +101,21 @@ const rootReducer = (state = initialState, action) => {
         draft.loadPostError = action.error;
         break;
 
+      //-------------------------------------------------------------------
+      case RETWEET_REQUEST:
+        draft.retweetLoading = true;
+        draft.retweetDone = false;
+        draft.retweetError = null;
+        break;
+      case RETWEET_SUCCESS:
+        draft.retweetLoading = false;
+        draft.retweetDone = true;
+        draft.mainPosts.unshift(action.data);
+        break;
+      case RETWEET_FAILURE:
+        draft.retweetLoading = false;
+        draft.retweetError = action.error;
+        break;
       //-------------------------------------------------------------------
       case ADD_POST_REQUEST:
         draft.addPostLoading = true;

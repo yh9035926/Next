@@ -19,6 +19,9 @@ import {
   REMOVE_POST_OF_ME,
   REMOVE_POST_REQUEST,
   REMOVE_POST_SUCCESS,
+  RETWEET_FAILURE,
+  RETWEET_REQUEST,
+  RETWEET_SUCCESS,
   UNLIKE_POST_FAILURE,
   UNLIKE_POST_REQUEST,
   UNLIKE_POST_SUCCESS,
@@ -43,7 +46,7 @@ function* loadPost(action) {
   } catch (err) {
     yield put({
       type: LOAD_POST_FAILURE,
-      data: err.response.data,
+      error: err.response.data,
     });
   }
 }
@@ -51,6 +54,31 @@ function* loadPost(action) {
 function* watchLoadPost() {
   yield takeLatest(LOAD_POST_REQUEST, loadPost); //마지막 것만
   //throttle("ADD_POST_REQUEST", addPost,2000) 2초 동안 1번 실행 REQUSET는 보내짐
+}
+//-------------------------------------------------------------
+function retweetAPI(data) {
+  return axios.post(`/post/${data}/retweet`);
+}
+
+function* retweet(action) {
+  try {
+    const result = yield call(retweetAPI, action.data);
+    yield put({
+      //put은 dipatch
+      type: RETWEET_SUCCESS,
+      data: result.data,
+    });
+  } catch (err) {
+    yield put({
+      type: RETWEET_FAILURE,
+      error: err.response.data,
+    });
+  }
+}
+
+function* watchretweet() {
+  yield takeLatest(RETWEET_REQUEST, retweet); //마지막 것만
+  //throttle("ADD_POST_REQUEST", addPost,2000) 2초 동안 1번 실행
 }
 //-------------------------------------------------------------
 function addPostAPI(data) {
@@ -72,7 +100,7 @@ function* addPost(action) {
   } catch (err) {
     yield put({
       type: ADD_POST_FAILURE,
-      data: err.response.data,
+      error: err.response.data,
     });
   }
 }
@@ -97,7 +125,7 @@ function* uploadImages(action) {
   } catch (err) {
     yield put({
       type: UPLOAD_IMAGES_FAILURE,
-      data: err.response.data,
+      error: err.response.data,
     });
   }
 }
@@ -128,7 +156,7 @@ function* removePost(action) {
   } catch (err) {
     yield put({
       type: REMOVE_POST_FAILURE,
-      data: err.response.data,
+      error: err.response.data,
     });
   }
 }
@@ -155,7 +183,7 @@ function* addComment(action) {
     console.error(err);
     yield put({
       type: ADD_COMMENT_FAILURE,
-      data: err.response.data,
+      error: err.response.data,
     });
   }
 }
@@ -182,7 +210,7 @@ function* likePost(action) {
     console.error(err);
     yield put({
       type: LIKE_POST_FAILURE,
-      data: err.response.data,
+      error: err.response.data,
     });
   }
 }
@@ -209,7 +237,7 @@ function* unlikePost(action) {
     console.error(err);
     yield put({
       type: UNLIKE_POST_FAILURE,
-      data: err.response.data,
+      error: err.response.data,
     });
   }
 }
@@ -228,5 +256,6 @@ export default function* postSaga() {
     fork(watchLikePost),
     fork(watchUnlikePost),
     fork(watchuploadImages),
+    fork(watchretweet),
   ]);
 }

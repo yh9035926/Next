@@ -8,9 +8,15 @@ import { LOAD_POST_REQUEST, LOAD_MY_INFO_REQUEST } from "../type";
 const Home = () => {
   const dispatch = useDispatch();
   const { me } = useSelector((state) => state.user);
-  const { mainPosts, hasMorePost, loadPostLoading } = useSelector(
+  const { mainPosts, hasMorePost, loadPostLoading, retweetError } = useSelector(
     (state) => state.post
   );
+
+  useEffect(() => {
+    if (retweetError) {
+      alert(retweetError);
+    }
+  }, [retweetError]);
 
   useEffect(() => {
     function onScroll() {
