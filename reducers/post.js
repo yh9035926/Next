@@ -9,9 +9,9 @@ import {
   REMOVE_POST_FAILURE,
   REMOVE_POST_REQUEST,
   REMOVE_POST_SUCCESS,
-  LOAD_POST_FAILURE,
-  LOAD_POST_REQUEST,
-  LOAD_POST_SUCCESS,
+  LOAD_POSTS_FAILURE,
+  LOAD_POSTS_REQUEST,
+  LOAD_POSTS_SUCCESS,
   LIKE_POST_REQUEST,
   LIKE_POST_SUCCESS,
   LIKE_POST_FAILURE,
@@ -60,9 +60,9 @@ export const initialState = {
   retweetDone: false,
   retweetError: null,
 
-  loadPostLoading: false,
-  loadPostDone: false,
-  loadPostError: null,
+  loadPostsLoading: false,
+  loadPostsDone: false,
+  loadPostsError: null,
 
   changeNicknameLoading: false,
   changeNicknameDone: false,
@@ -85,37 +85,7 @@ const rootReducer = (state = initialState, action) => {
       case REMOVE_IMAGE:
         draft.imagePaths = draft.imagePaths.filter((v, i) => i !== action.data);
         break;
-      case LOAD_POST_REQUEST:
-        draft.loadPostLoading = true;
-        draft.loadPostDone = false;
-        draft.loadPostError = null;
-        break;
-      case LOAD_POST_SUCCESS:
-        draft.loadPostLoading = false;
-        draft.loadPostDone = true;
-        draft.mainPosts = draft.mainPosts.concat(action.data); // action.data를 concat해서 기존 데이터에 추가
-        draft.hasMorePost = draft.mainPosts.length < 30;
-        break;
-      case LOAD_POST_FAILURE:
-        draft.loadPostLoading = false;
-        draft.loadPostError = action.error;
-        break;
 
-      //-------------------------------------------------------------------
-      case RETWEET_REQUEST:
-        draft.retweetLoading = true;
-        draft.retweetDone = false;
-        draft.retweetError = null;
-        break;
-      case RETWEET_SUCCESS:
-        draft.retweetLoading = false;
-        draft.retweetDone = true;
-        draft.mainPosts.unshift(action.data);
-        break;
-      case RETWEET_FAILURE:
-        draft.retweetLoading = false;
-        draft.retweetError = action.error;
-        break;
       //-------------------------------------------------------------------
       case ADD_POST_REQUEST:
         draft.addPostLoading = true;
@@ -149,6 +119,39 @@ const rootReducer = (state = initialState, action) => {
       case LIKE_POST_FAILURE:
         draft.likePostLoading = false;
         draft.likePostError = action.error;
+        break;
+      //-------------------------------------------------------------------
+
+      case LOAD_POSTS_REQUEST:
+        draft.loadPostsLoading = true;
+        draft.loadPostsDone = false;
+        draft.loadPostsError = null;
+        break;
+      case LOAD_POSTS_SUCCESS:
+        draft.loadPostsLoading = false;
+        draft.loadPostsDone = true;
+        draft.mainPosts = action.data.concat(draft.mainPosts); // action.data를 concat해서 기존 데이터에 추가
+        draft.hasMorePost = action.data.length === 10;
+        break;
+      case LOAD_POSTS_FAILURE:
+        draft.loadPostsLoading = false;
+        draft.loadPostsError = action.error;
+        break;
+
+      //-------------------------------------------------------------------
+      case RETWEET_REQUEST:
+        draft.retweetLoading = true;
+        draft.retweetDone = false;
+        draft.retweetError = null;
+        break;
+      case RETWEET_SUCCESS:
+        draft.retweetLoading = false;
+        draft.retweetDone = true;
+        draft.mainPosts.unshift(action.data);
+        break;
+      case RETWEET_FAILURE:
+        draft.retweetLoading = false;
+        draft.retweetError = action.error;
         break;
       //-------------------------------------------------------------------
       case UPLOAD_IMAGES_REQUEST:

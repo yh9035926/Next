@@ -44,7 +44,6 @@ const PostCard = ({ post }) => {
     });
   }, [id]);
 
-  
   const onUnLike = useCallback(() => {
     if (!id) {
       return alert("로그인이 필요합니다");
@@ -116,25 +115,21 @@ const PostCard = ({ post }) => {
         }
         extra={id && <FollowButton post={post} />}
       >
-        {post.RetweetId && post.Retweet}? (
-        <Card
-          cover={
-            post.Images[0] && (
-              <PostImages images={post.Images} />
-            )
-          }
-        ></Card>
-        <Card.Meta
-          avatar={<Avatar>{post.User.nickname[0]}</Avatar>}
-          title={post.User.nickname}
-          description={<PostCardContent postData={post.content} />}
-        ></Card.Meta>
-        ) :
-        <Card.Meta
-          avatar={<Avatar>{post.User.nickname[0]}</Avatar>}
-          title={post.User.nickname}
-          description={<PostCardContent postData={post.content} />}
-        ></Card.Meta>
+        {post.RetweetId && post.Retweet ? (
+          <Card cover={post.Images[0] && <PostImages images={post.Images} />}>
+            <Card.Meta
+              avatar={<Avatar>{post.User.nickname[0]}</Avatar>}
+              title={post.User.nickname}
+              description={<PostCardContent postData={post.content} />}
+            ></Card.Meta>
+          </Card>
+        ) : (
+          <Card.Meta
+            avatar={<Avatar>{post.User.nickname[0]}</Avatar>}
+            title={post.User.nickname}
+            description={<PostCardContent postData={post.content} />}
+          ></Card.Meta>
+        )}
       </Card>
       {commentFormOpened && (
         <div>

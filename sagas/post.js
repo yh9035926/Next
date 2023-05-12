@@ -12,9 +12,9 @@ import {
   LIKE_POST_FAILURE,
   LIKE_POST_REQUEST,
   LIKE_POST_SUCCESS,
-  LOAD_POST_FAILURE,
-  LOAD_POST_REQUEST,
-  LOAD_POST_SUCCESS,
+  LOAD_POSTS_FAILURE,
+  LOAD_POSTS_REQUEST,
+  LOAD_POSTS_SUCCESS,
   REMOVE_POST_FAILURE,
   REMOVE_POST_OF_ME,
   REMOVE_POST_REQUEST,
@@ -30,56 +30,6 @@ import {
   UPLOAD_IMAGES_SUCCESS,
 } from "../type";
 
-function loadPostAPI(data) {
-  return axios.get(`/posts`, data);
-}
-
-function* loadPost(action) {
-  try {
-    console.log("로드 사가 실행");
-    const result = yield call(loadPostAPI, action.data);
-    yield put({
-      //put은 dipatch
-      type: LOAD_POST_SUCCESS,
-      data: result.data,
-    });
-  } catch (err) {
-    yield put({
-      type: LOAD_POST_FAILURE,
-      error: err.response.data,
-    });
-  }
-}
-
-function* watchLoadPost() {
-  yield takeLatest(LOAD_POST_REQUEST, loadPost); //마지막 것만
-  //throttle("ADD_POST_REQUEST", addPost,2000) 2초 동안 1번 실행 REQUSET는 보내짐
-}
-//-------------------------------------------------------------
-function retweetAPI(data) {
-  return axios.post(`/post/${data}/retweet`);
-}
-
-function* retweet(action) {
-  try {
-    const result = yield call(retweetAPI, action.data);
-    yield put({
-      //put은 dipatch
-      type: RETWEET_SUCCESS,
-      data: result.data,
-    });
-  } catch (err) {
-    yield put({
-      type: RETWEET_FAILURE,
-      error: err.response.data,
-    });
-  }
-}
-
-function* watchretweet() {
-  yield takeLatest(RETWEET_REQUEST, retweet); //마지막 것만
-  //throttle("ADD_POST_REQUEST", addPost,2000) 2초 동안 1번 실행
-}
 //-------------------------------------------------------------
 function addPostAPI(data) {
   return axios.post("/post", data);
@@ -132,6 +82,57 @@ function* uploadImages(action) {
 
 function* watchuploadImages() {
   yield takeLatest(UPLOAD_IMAGES_REQUEST, uploadImages); //마지막 것만
+  //throttle("ADD_POST_REQUEST", addPost,2000) 2초 동안 1번 실행
+}
+//-------------------------------------------------------------
+
+function loadPostsAPI() {
+  return axios.get(`/posts`);
+}
+
+function* loadPosts(action) {
+  try {
+    const result = yield call(loadPostsAPI, action.data);
+    yield put({
+      //put은 dipatch
+      type: LOAD_POSTS_SUCCESS,
+      data: result.data,
+    });
+  } catch (err) {
+    yield put({
+      type: LOAD_POSTS_FAILURE,
+      error: err.response.data,
+    });
+  }
+}
+
+function* watchLoadPost() {
+  yield takeLatest(LOAD_POSTS_REQUEST, loadPosts); //마지막 것만
+  //throttle("ADD_POST_REQUEST", addPost,2000) 2초 동안 1번 실행 REQUSET는 보내짐
+}
+//-------------------------------------------------------------
+function retweetAPI(data) {
+  return axios.post(`/post/${data}/retweet`);
+}
+
+function* retweet(action) {
+  try {
+    const result = yield call(retweetAPI, action.data);
+    yield put({
+      //put은 dipatch
+      type: RETWEET_SUCCESS,
+      data: result.data,
+    });
+  } catch (err) {
+    yield put({
+      type: RETWEET_FAILURE,
+      error: err.response.data,
+    });
+  }
+}
+
+function* watchretweet() {
+  yield takeLatest(RETWEET_REQUEST, retweet); //마지막 것만
   //throttle("ADD_POST_REQUEST", addPost,2000) 2초 동안 1번 실행
 }
 //-------------------------------------------------------------

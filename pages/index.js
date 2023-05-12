@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import AppLayout from "../components/AppLayout";
 import PostCard from "../components/PostCard";
 import PostForm from "../components/PostForm";
-import { LOAD_POST_REQUEST, LOAD_MY_INFO_REQUEST } from "../type";
+import { LOAD_POSTS_REQUEST, LOAD_MY_INFO_REQUEST } from "../type";
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -19,6 +19,11 @@ const Home = () => {
   }, [retweetError]);
 
   useEffect(() => {
+    dispatch({ type: LOAD_MY_INFO_REQUEST });
+    dispatch({ type: LOAD_POSTS_REQUEST });
+  }, []);
+
+  useEffect(() => {
     function onScroll() {
       console.log(
         window.screenY,
@@ -30,8 +35,9 @@ const Home = () => {
         document.documentElement.scrollHeight - 300
       )
         if (hasMorePost && !loadPostLoading) {
+          //const lastId = mainPosts[mainPosts.length - 1]?.id;
           dispatch({
-            type: LOAD_POST_REQUEST,
+            type: LOAD_POSTS_REQUEST,
           });
         }
     }
@@ -39,7 +45,7 @@ const Home = () => {
     return () => {
       window.removeEventListener("scroll", onScroll);
     };
-  }, [hasMorePost, loadPostLoading]);
+  }, [hasMorePost, loadPostLoading, mainPosts]);
 
   return (
     <AppLayout>
