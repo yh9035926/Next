@@ -86,13 +86,13 @@ function* watchuploadImages() {
 }
 //-------------------------------------------------------------
 
-function loadPostsAPI() {
-  return axios.get(`/posts`);
+function loadPostsAPI(lastId) {
+  return axios.get(`/posts?lastId=${lastId || 0}`); //get에서 데이터 넣기 ? a=b 이런 식으로
 }
 
 function* loadPosts(action) {
   try {
-    const result = yield call(loadPostsAPI, action.data);
+    const result = yield call(loadPostsAPI, action.lastId);
     yield put({
       //put은 dipatch
       type: LOAD_POSTS_SUCCESS,
@@ -124,6 +124,7 @@ function* retweet(action) {
       data: result.data,
     });
   } catch (err) {
+    console.error(err);
     yield put({
       type: RETWEET_FAILURE,
       error: err.response.data,
@@ -131,7 +132,7 @@ function* retweet(action) {
   }
 }
 
-function* watchretweet() {
+function* watchRetweet() {
   yield takeLatest(RETWEET_REQUEST, retweet); //마지막 것만
   //throttle("ADD_POST_REQUEST", addPost,2000) 2초 동안 1번 실행
 }
@@ -257,6 +258,6 @@ export default function* postSaga() {
     fork(watchLikePost),
     fork(watchUnlikePost),
     fork(watchuploadImages),
-    fork(watchretweet),
+    fork(watchRetweet),
   ]);
 }

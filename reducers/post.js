@@ -130,7 +130,7 @@ const rootReducer = (state = initialState, action) => {
       case LOAD_POSTS_SUCCESS:
         draft.loadPostsLoading = false;
         draft.loadPostsDone = true;
-        draft.mainPosts = action.data.concat(draft.mainPosts); // action.data를 concat해서 기존 데이터에 추가
+        draft.mainPosts = draft.mainPosts.concat(action.data); // action.data를 concat해서 기존 데이터에 추가
         draft.hasMorePost = action.data.length === 10;
         break;
       case LOAD_POSTS_FAILURE:

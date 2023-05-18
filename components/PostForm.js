@@ -2,7 +2,6 @@ import React, { useEffect, useRef } from "react";
 import { Button, Form, Input } from "antd";
 import { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { addPost } from "../reducers/post";
 import useInput from "../hooks/useInput";
 import { ADD_POST_REQUEST, REMOVE_IMAGE, UPLOAD_IMAGES_REQUEST } from "../type";
 
@@ -45,6 +44,7 @@ const PostForm = () => {
 
   const onSubmit = useCallback(() => {
     if (!text || !text.trim()) {
+      //trim 공백 제거
       return alert("게시글을 작성하세요.");
     }
     const formData = new FormData();
@@ -57,9 +57,16 @@ const PostForm = () => {
       data: formData,
     });
   }, [text, imagePaths]);
+
+  const Enter = (e) => {
+    if (e.key === "Enter") {
+      onSubmit();
+    }
+  };
+
   return (
     <Form encType="multipart/form-data" onFinish={onSubmit}>
-      <Input.TextArea value={text} onChange={onChangeText} />
+      <Input.TextArea value={text} onChange={onChangeText} onKeyUp={Enter} />
       <div>
         <input
           type="file"

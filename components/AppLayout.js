@@ -9,25 +9,32 @@ import { useSelector } from "react-redux";
 const AppLayout = ({ children }) => {
   const { me } = useSelector((state) => state.user);
 
+  const menuItems = [
+    {
+      label: <Link href="/">노드버드</Link>,
+      key: "nodebord",
+    },
+    {
+      label: <Link href="/profile">프로필</Link>,
+      key: "profile",
+    },
+    {
+      label: (
+        <Input.Search
+          enterButton="Search"
+          style={{ verticalAlign: "middle" }}
+        />
+      ),
+      key: "search",
+    },
+    {
+      label: <Link href="/signup">회원가입</Link>,
+      key: "signup",
+    },
+  ];
   return (
     <div>
-      <Menu mode="horizontal">
-        <Menu.Item>
-          <Link href="/">노드버드</Link>
-        </Menu.Item>
-        <Menu.Item>
-          <Link href="/profile">프로필</Link>
-        </Menu.Item>
-        <Menu.Item>
-          <Input.Search
-            enterButton="Search"
-            style={{ verticalAlign: "middle" }}
-          />
-        </Menu.Item>
-        <Menu.Item>
-          <Link href="/signup">회원가입</Link>
-        </Menu.Item>
-      </Menu>
+      <Menu mode="horizontal" items={menuItems}></Menu>
       <Row gutter={8}>
         <Col xs={24} md={6}>
           {me ? <UserProfile /> : <LoginForm />}
