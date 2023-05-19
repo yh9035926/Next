@@ -26,13 +26,16 @@ const PostCard = ({ post }) => {
   const id = useSelector((state) => state.user.me?.id);
   const liked = post.Likers.find((v) => v.id === id);
 
-  const { removerPostLoading, retweetError } = useSelector(
+  const { removerPostLoading } = useSelector(
     (state) => state.post
   );
   const [commentFormOpened, setCommentFormOpened] = useState(false);
   const onToggleComment = useCallback(() => {
-    setCommentFormOpened((prev) => !prev);
-  }, []);
+    if (!id) {
+      return alert("로그인이 필요합니다");
+    }
+    return setCommentFormOpened((prev) => !prev);
+  }, [id]);
 
   const onLike = useCallback(() => {
     if (!id) {

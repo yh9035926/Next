@@ -7,6 +7,10 @@ import { useCallback } from "react";
 import useInput from "../hooks/useInput";
 import { SIGN_UP_REQUEST } from "../type";
 import { useDispatch, useSelector } from "react-redux";
+import wrapper from "../store/configureStore";
+import { END } from "redux-saga";
+import axios from "axios";
+
 const Signup = () => {
   const dispatch = useDispatch();
   const { signUpLoading, signUpDone, signUpError, logInDone } = useSelector(
@@ -112,4 +116,21 @@ const Signup = () => {
   );
 };
 
+export const getServerSideProps = wrapper.getServerSideProps(
+  async (context) => {
+    const cookie = context.req ? context.req.headers.cookie : "";
+    axios.defaults.headers.Cookie = "";
+    if (context.req && cookie) {
+      axios.defaults.headers.Cookie = cookie;
+    } //Cookie 넣어줘야 로그인 새로고침 가능
+    context.store.dispatch({
+      type: LOAD_MY_INFO_REQUEST,
+    });
+    context.store.dispatch({
+      type: LOAD_POSTS_REQUEST,
+    });
+    context.store.dispatch(END);
+    await context.store.sagaTask.toPromise();
+  }
+);
 export default Signup;

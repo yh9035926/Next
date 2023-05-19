@@ -29,6 +29,9 @@ import {
   REMOVE_FOLLOWER_REQUEST,
   REMOVE_FOLLOWER_FAILURE,
   REMOVE_FOLLOWER_SUCCESS,
+  LOAD_USER_REQUEST,
+  LOAD_USER_SUCCESS,
+  LOAD_USER_FAILURE,
 } from "../type";
 
 import {
@@ -193,6 +196,31 @@ function* loadMyInfo(action) {
 function* watchLoadMyInfo() {
   yield takeEvery(LOAD_MY_INFO_REQUEST, loadMyInfo); //반복
 }
+
+//-------------------------------------------------------------------
+function loadUserAPI(data) {
+  return axios.get(`user/${data}`);
+}
+
+function* loadUser(action) {
+  try {
+    const result = yield call(loadUserAPI, action.data);
+    yield put({
+      //put은 dipatch
+
+      type: LOAD_USER_SUCCESS,
+      data: result.data,
+    });
+  } catch (err) {
+    yield put({
+      type: LOAD_USER_FAILURE,
+      error: err.response.data,
+    });
+  }
+}
+function* watchLoadUser() {
+  yield takeEvery(LOAD_USER_REQUEST, loadUser); //반복
+}
 //-------------------------------------------------------------------
 function loadFollowersAPI(data) {
   return axios.get("/user/followers", data);
@@ -305,5 +333,6 @@ export default function* userSaga() {
     fork(watchLoadMyInfo),
     fork(watchLoadFollowins),
     fork(watchLoadFollowers),
+    fork(watchLoadUser),
   ]);
 }

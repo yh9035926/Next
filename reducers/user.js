@@ -32,6 +32,9 @@ import {
   REMOVE_FOLLOWER_REQUEST,
   REMOVE_FOLLOWER_SUCCESS,
   REMOVE_FOLLOWER_FAILURE,
+  LOAD_USER_REQUEST,
+  LOAD_USER_SUCCESS,
+  LOAD_USER_FAILURE,
 } from "../type";
 
 export const initialState = {
@@ -46,6 +49,10 @@ export const initialState = {
   loadFollowingsLoading: false,
   loadFollowingsDone: false,
   loadFollowingsError: null,
+
+  loadUserLoading: false,
+  loadUserDone: false,
+  loadUserError: null,
 
   logInLoading: false,
   logInDone: false,
@@ -75,9 +82,8 @@ export const initialState = {
   unFollowDone: false,
   unFollowError: null,
 
+  userInfo: null,
   me: null,
-  signUpData: {},
-  loginData: {},
 };
 
 export const loginRequestAction = (data) => {
@@ -121,7 +127,22 @@ const rootReducer = (state = initialState, action) => {
         draft.loadMyInfoLoading = false;
         draft.loadMyInfoError = action.error;
         break;
+      //-------------------------------------------------------------------
 
+      case LOAD_USER_REQUEST:
+        draft.loadUserError = null;
+        draft.loadUserLoading = true;
+        draft.loadUserDone = false;
+        break;
+      case LOAD_USER_SUCCESS:
+        draft.loadUserLoading = false;
+        draft.userInfo = action.data;
+        draft.loadUserDone = true;
+        break;
+      case LOAD_USER_FAILURE:
+        draft.loadUserLoading = false;
+        draft.loadUserError = action.error;
+        break;
       //-------------------------------------------------------------------
 
       case REMOVE_FOLLOWER_REQUEST:

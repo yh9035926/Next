@@ -12,7 +12,7 @@ const configureStore = () => {
       ? compose(applyMiddleware(...middlewares))
       : composeWithDevTools(applyMiddleware(...middlewares));
   const store = createStore(rootReducer, enhancer);
-  store.sagaTask = sagaMiddleware.run(rootSaga);
+  store.sagaTask = sagaMiddleware.run(rootSaga); //sagaTask 서버사이드랜더링용
   return store;
 };
 
