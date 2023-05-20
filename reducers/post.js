@@ -25,12 +25,16 @@ import {
   RETWEET_FAILURE,
   RETWEET_SUCCESS,
   RETWEET_REQUEST,
+  LOAD_POST_REQUEST,
+  LOAD_POST_SUCCESS,
+  LOAD_POST_FAILURE,
 } from "../type";
 
 export const initialState = {
   mainPosts: [],
   imagePaths: [],
   hasMorePost: true,
+  singlePost: null,
 
   addPostLoading: false,
   addPostDone: false,
@@ -134,6 +138,23 @@ const rootReducer = (state = initialState, action) => {
         draft.hasMorePost = action.data.length === 10;
         break;
       case LOAD_POSTS_FAILURE:
+        draft.loadPostsLoading = false;
+        draft.loadPostsError = action.error;
+        break;
+
+      //-------------------------------------------------------------------
+
+      case LOAD_POST_REQUEST:
+        draft.loadPostsLoading = true;
+        draft.loadPostsDone = false;
+        draft.loadPostsError = null;
+        break;
+      case LOAD_POST_SUCCESS:
+        draft.loadPostsLoading = false;
+        draft.loadPostsDone = true;
+        draft.singlePost = action.data;
+        break;
+      case LOAD_POST_FAILURE:
         draft.loadPostsLoading = false;
         draft.loadPostsError = action.error;
         break;

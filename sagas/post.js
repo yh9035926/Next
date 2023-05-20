@@ -15,6 +15,9 @@ import {
   LOAD_POSTS_FAILURE,
   LOAD_POSTS_REQUEST,
   LOAD_POSTS_SUCCESS,
+  LOAD_POST_FAILURE,
+  LOAD_POST_REQUEST,
+  LOAD_POST_SUCCESS,
   REMOVE_POST_FAILURE,
   REMOVE_POST_OF_ME,
   REMOVE_POST_REQUEST,
@@ -106,8 +109,34 @@ function* loadPosts(action) {
   }
 }
 
-function* watchLoadPost() {
+function* watchLoadPosts() {
   yield takeLatest(LOAD_POSTS_REQUEST, loadPosts); //마지막 것만
+  //throttle("ADD_POST_REQUEST", addPost,2000) 2초 동안 1번 실행 REQUSET는 보내짐
+}
+//-------------------------------------------------------------
+
+function loadPostAPI(data) {
+  return axios.get(`/post/${data}`); //get에서 데이터 넣기 ? a=b 이런 식으로
+}
+
+function* loadPost(action) {
+  try {
+    const result = yield call(loadPostAPI, action.data);
+    yield put({
+      //put은 dipatch
+      type: LOAD_POST_SUCCESS,
+      data: result.data,
+    });
+  } catch (err) {
+    yield put({
+      type: LOAD_POST_FAILURE,
+      error: err.response.data,
+    });
+  }
+}
+
+function* watchLoadPost() {
+  yield takeLatest(LOAD_POST_REQUEST, loadPost); //마지막 것만
   //throttle("ADD_POST_REQUEST", addPost,2000) 2초 동안 1번 실행 REQUSET는 보내짐
 }
 //-------------------------------------------------------------
@@ -254,10 +283,11 @@ export default function* postSaga() {
     fork(watchAddPost),
     fork(watchAddComment),
     fork(watchRemovePost),
-    fork(watchLoadPost),
+    fork(watchLoadPosts),
     fork(watchLikePost),
     fork(watchUnlikePost),
     fork(watchuploadImages),
     fork(watchRetweet),
+    fork(watchLoadPost),
   ]);
 }
