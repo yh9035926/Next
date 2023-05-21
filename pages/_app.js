@@ -1,12 +1,16 @@
 import React from "react";
-
+import Head from "next/head";
 import PropTypes from "prop-types";
 import wrapper from "../store/configureStore";
 
 const NodeBrid = ({ Component }) => {
   return (
     <>
-      <Component />
+      <Head>
+        <meta charSet="utf-8" />
+        <title>NodeBird</title>
+        <Component />
+      </Head>
     </>
   );
 };
