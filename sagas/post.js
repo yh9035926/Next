@@ -12,12 +12,18 @@ import {
   LIKE_POST_FAILURE,
   LIKE_POST_REQUEST,
   LIKE_POST_SUCCESS,
+  LOAD_HASHTAG_POSTS_FAILURE,
+  LOAD_HASHTAG_POSTS_REQUEST,
+  LOAD_HASHTAG_POSTS_SUCCESS,
   LOAD_POSTS_FAILURE,
   LOAD_POSTS_REQUEST,
   LOAD_POSTS_SUCCESS,
   LOAD_POST_FAILURE,
   LOAD_POST_REQUEST,
   LOAD_POST_SUCCESS,
+  LOAD_USER_POSTS_FAILURE,
+  LOAD_USER_POSTS_REQUEST,
+  LOAD_USER_POSTS_SUCCESS,
   REMOVE_POST_FAILURE,
   REMOVE_POST_OF_ME,
   REMOVE_POST_REQUEST,
@@ -139,6 +145,62 @@ function* watchLoadPost() {
   yield takeLatest(LOAD_POST_REQUEST, loadPost); //마지막 것만
   //throttle("ADD_POST_REQUEST", addPost,2000) 2초 동안 1번 실행 REQUSET는 보내짐
 }
+
+//-------------------------------------------------------------
+
+function loadUserPostAPI(data, lastId) {
+  return axios.get(`/user/${data}/posts?lastId=${lastId || 0}`); //get에서 데이터 넣기 ? a=b 이런 식으로
+}
+
+function* loadUserPost(action) {
+  try {
+    const result = yield call(loadUserPostAPI, action.data, action.lastId);
+    yield put({
+      //put은 dipatch
+      type: LOAD_USER_POSTS_SUCCESS,
+      data: result.data,
+    });
+  } catch (err) {
+    yield put({
+      type: LOAD_USER_POSTS_FAILURE,
+      error: err.response.data,
+    });
+  }
+}
+
+function* watchLoadUserPost() {
+  yield takeLatest(LOAD_USER_POSTS_REQUEST, loadUserPost); //마지막 것만
+  //throttle("ADD_POST_REQUEST", addPost,2000) 2초 동안 1번 실행 REQUSET는 보내짐
+}
+//-------------------------------------------------------------
+
+function loadHashtagPostAPI(data, lastId) {
+  return axios.get(
+    `/hashtag/${encodeURIComponent(data)}?lastId=${lastId || 0}`
+  ); //get에서 데이터 넣기 ? a=b 이런 식으로
+//encodeURIComponent  한글을 영문자로 바꿈
+  }
+function* loadHashtagPost(action) {
+  try {
+    const result = yield call(loadHashtagPostAPI, action.data, action.lastId);
+    yield put({
+      //put은 dipatch
+      type: LOAD_HASHTAG_POSTS_SUCCESS,
+      data: result.data,
+    });
+  } catch (err) {
+    yield put({
+      type: LOAD_HASHTAG_POSTS_FAILURE,
+      error: err.response.data,
+    });
+  }
+}
+
+function* watchLoadHashtagPost() {
+  yield takeLatest(LOAD_HASHTAG_POSTS_REQUEST, loadHashtagPost); //마지막 것만
+  //throttle("ADD_POST_REQUEST", addPost,2000) 2초 동안 1번 실행 REQUSET는 보내짐
+}
+
 //-------------------------------------------------------------
 function retweetAPI(data) {
   return axios.post(`/post/${data}/retweet`);
@@ -289,5 +351,7 @@ export default function* postSaga() {
     fork(watchuploadImages),
     fork(watchRetweet),
     fork(watchLoadPost),
+    fork(watchLoadUserPost),
+    fork(watchLoadHashtagPost),
   ]);
 }

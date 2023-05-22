@@ -9,8 +9,8 @@ const NodeBrid = ({ Component }) => {
       <Head>
         <meta charSet="utf-8" />
         <title>NodeBird</title>
-        <Component />
       </Head>
+      <Component />
     </>
   );
 };

@@ -28,6 +28,12 @@ import {
   LOAD_POST_REQUEST,
   LOAD_POST_SUCCESS,
   LOAD_POST_FAILURE,
+  LOAD_USER_POSTS_REQUEST,
+  LOAD_HASHTAG_POSTS_REQUEST,
+  LOAD_USER_POSTS_SUCCESS,
+  LOAD_HASHTAG_POSTS_SUCCESS,
+  LOAD_USER_POSTS_FAILURE,
+  LOAD_HASHTAG_POSTS_FAILURE,
 } from "../type";
 
 export const initialState = {
@@ -67,6 +73,10 @@ export const initialState = {
   loadPostsLoading: false,
   loadPostsDone: false,
   loadPostsError: null,
+
+  loadPostLoading: false,
+  loadPostDone: false,
+  loadPostError: null,
 
   changeNicknameLoading: false,
   changeNicknameDone: false,
@@ -127,10 +137,14 @@ const rootReducer = (state = initialState, action) => {
       //-------------------------------------------------------------------
 
       case LOAD_POSTS_REQUEST:
+      case LOAD_USER_POSTS_REQUEST:
+      case LOAD_HASHTAG_POSTS_REQUEST:
         draft.loadPostsLoading = true;
         draft.loadPostsDone = false;
         draft.loadPostsError = null;
         break;
+      case LOAD_USER_POSTS_SUCCESS:
+      case LOAD_HASHTAG_POSTS_SUCCESS:
       case LOAD_POSTS_SUCCESS:
         draft.loadPostsLoading = false;
         draft.loadPostsDone = true;
@@ -138,6 +152,8 @@ const rootReducer = (state = initialState, action) => {
         draft.hasMorePost = action.data.length === 10;
         break;
       case LOAD_POSTS_FAILURE:
+      case LOAD_USER_POSTS_FAILURE:
+      case LOAD_HASHTAG_POSTS_FAILURE:
         draft.loadPostsLoading = false;
         draft.loadPostsError = action.error;
         break;
@@ -145,18 +161,18 @@ const rootReducer = (state = initialState, action) => {
       //-------------------------------------------------------------------
 
       case LOAD_POST_REQUEST:
-        draft.loadPostsLoading = true;
-        draft.loadPostsDone = false;
-        draft.loadPostsError = null;
+        draft.loadPostLoading = true;
+        draft.loadPostDone = false;
+        draft.loadPostError = null;
         break;
       case LOAD_POST_SUCCESS:
-        draft.loadPostsLoading = false;
-        draft.loadPostsDone = true;
+        draft.loadPostLoading = false;
+        draft.loadPostDone = true;
         draft.singlePost = action.data;
         break;
       case LOAD_POST_FAILURE:
-        draft.loadPostsLoading = false;
-        draft.loadPostsError = action.error;
+        draft.loadPostLoading = false;
+        draft.loadPostError = action.error;
         break;
 
       //-------------------------------------------------------------------

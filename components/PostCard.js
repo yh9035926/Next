@@ -1,6 +1,6 @@
 import { Avatar, Button, Card, List, Popover } from "antd";
 import { Comment } from "@ant-design/compatible";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 import {
   EllipsisOutlined,
   HeartOutlined,
