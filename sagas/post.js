@@ -57,6 +57,7 @@ function* addPost(action) {
       data: result.data.id,
     });
   } catch (err) {
+    console.error(err);
     yield put({
       type: ADD_POST_FAILURE,
       error: err.response.data,
@@ -82,6 +83,7 @@ function* uploadImages(action) {
       data: result.data,
     });
   } catch (err) {
+    console.error(err);
     yield put({
       type: UPLOAD_IMAGES_FAILURE,
       error: err.response.data,
@@ -108,6 +110,7 @@ function* loadPosts(action) {
       data: result.data,
     });
   } catch (err) {
+    console.error(err);
     yield put({
       type: LOAD_POSTS_FAILURE,
       error: err.response.data,
@@ -134,6 +137,7 @@ function* loadPost(action) {
       data: result.data,
     });
   } catch (err) {
+    console.error(err);
     yield put({
       type: LOAD_POST_FAILURE,
       error: err.response.data,
@@ -161,6 +165,7 @@ function* loadUserPost(action) {
       data: result.data,
     });
   } catch (err) {
+    console.error(err);
     yield put({
       type: LOAD_USER_POSTS_FAILURE,
       error: err.response.data,
@@ -178,8 +183,8 @@ function loadHashtagPostAPI(data, lastId) {
   return axios.get(
     `/hashtag/${encodeURIComponent(data)}?lastId=${lastId || 0}`
   ); //get에서 데이터 넣기 ? a=b 이런 식으로
-//encodeURIComponent  한글을 영문자로 바꿈
-  }
+  //encodeURIComponent  한글을 영문자로 바꿈
+}
 function* loadHashtagPost(action) {
   try {
     const result = yield call(loadHashtagPostAPI, action.data, action.lastId);
@@ -189,6 +194,7 @@ function* loadHashtagPost(action) {
       data: result.data,
     });
   } catch (err) {
+    console.error(err);
     yield put({
       type: LOAD_HASHTAG_POSTS_FAILURE,
       error: err.response.data,
@@ -247,6 +253,7 @@ function* removePost(action) {
       data: action.data,
     });
   } catch (err) {
+    console.error(err);
     yield put({
       type: REMOVE_POST_FAILURE,
       error: err.response.data,

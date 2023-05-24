@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import { StopOutlined } from "@ant-design/icons";
 import { useDispatch } from "react-redux";
 import { REMOVE_FOLLOWER_REQUEST, UNFOLLOW_REQUEST } from "../type";
-const FollowList = ({ header, data }) => {
+const FollowList = ({ header, data, loading, onClickMore }) => {
   const dispatch = useDispatch();
 
   const onCancel = (id) => () => {
@@ -27,7 +27,9 @@ const FollowList = ({ header, data }) => {
       grid={{ gutter: 4, xs: 2, md: 3 }}
       loadMore={
         <div style={{ textAlign: "center", margin: "10px 0" }}>
-          <Button>더 보기</Button>
+          <Button onClick={onClickMore} loading={loading}>
+            더 보기
+          </Button>
         </div>
       }
       bordered
@@ -48,5 +50,7 @@ const FollowList = ({ header, data }) => {
 FollowList.propTypes = {
   header: PropTypes.string.isRequired,
   data: PropTypes.array.isRequired,
+  onClickMore: PropTypes.func.isRequired,
+  loading: PropTypes.bool.isRequired,
 };
 export default FollowList;

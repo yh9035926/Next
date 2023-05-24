@@ -5,7 +5,11 @@ import Router from "next/router";
 import { Form, Input, Button, Checkbox } from "antd";
 import { useCallback } from "react";
 import useInput from "../hooks/useInput";
-import { SIGN_UP_REQUEST } from "../type";
+import {
+  LOAD_MY_INFO_REQUEST,
+  LOAD_POSTS_REQUEST,
+  SIGN_UP_REQUEST,
+} from "../type";
 import { useDispatch, useSelector } from "react-redux";
 import wrapper from "../store/configureStore";
 import { END } from "redux-saga";

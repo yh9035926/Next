@@ -2,13 +2,11 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import AppLayout from "../../components/AppLayout";
 import PostCard from "../../components/PostCard";
-import { LOAD_MY_INFO_REQUEST } from "../type";
+import { LOAD_MY_INFO_REQUEST } from "../../type";
 import wrapper from "../../store/configureStore";
 import { END } from "redux-saga";
 import axios from "axios";
 import { LOAD_HASHTAG_POSTS_REQUEST } from "../../type";
-import Head from "next/head";
-import { Avatar, Card } from "antd";
 import { useRouter } from "next/router";
 
 const Hashtag = () => {
@@ -18,8 +16,7 @@ const Hashtag = () => {
   const { mainPosts, hasMorePost, loadPostsLoading } = useSelector(
     (state) => state.post
   );
-  const { userInfo } = useSelector((state) => state.user);
-
+ 
   useEffect(() => {
     function onScroll() {
       console.log(
@@ -37,7 +34,7 @@ const Hashtag = () => {
             lastId:
               mainPosts[mainPosts.length - 1] &&
               mainPosts[mainPosts.length - 1].id,
-            data: id,
+            data: tag,
           });
         }
     }
@@ -45,52 +42,10 @@ const Hashtag = () => {
     return () => {
       window.removeEventListener("scroll", onScroll);
     };
-  }, [mainPosts.length, hasMorePost, id]);
+  }, [mainPosts.length, hasMorePost, tag, loadPostsLoading]);
 
   return (
     <AppLayout>
-      <Head>
-        <title>{userInfo.nickname}님의 글</title>
-
-        <meta name="description" content={`${userInfo.nickname}님의 게시글`} />
-        <meta property="og:title" content={`${userInfo.nickname}님의 게시금`} />
-        <meta
-          property="og:description"
-          content={`${userInfo.nickname}님의 게시글`}
-        />
-        <meta
-          property="og:image"
-          content={"https://nodebird.com/favicon.png"}
-        />
-        <meta property="og:url" content={`https://nodebird.com/post/${id}`} />
-      </Head>
-      {userInfo ? (
-        <Card
-          actions={[
-            <div key="twit">
-              짹쨱
-              <br />
-              {userInfo.Posts}
-            </div>,
-            <div key="followings">
-              팔로잉
-              <br />
-              {userInfo.Followings}
-            </div>,
-            <div key="followers">
-              팔로워
-              <br />
-              {userInfo.Followers}
-            </div>,
-          ]}
-        >
-          <Card.Meta
-            avatar={<Avatar>{userInfo.nickname[0]}</Avatar>}
-            title={userInfo.nickname}
-            description="우자"
-          />
-        </Card>
-      ) : null}
       {mainPosts.map((c) => (
         <PostCard key={c.id} post={c} />
       ))}
@@ -106,11 +61,11 @@ export const getServerSideProps = wrapper.getServerSideProps(
       axios.defaults.headers.Cookie = cookie;
     } //Cookie 넣어줘야 로그인 새로고침 가능
     context.store.dispatch({
-      type: LOAD_HASHTAG_POSTS_REQUEST,
-      data: context.params.id,
+      type: LOAD_MY_INFO_REQUEST,
     });
     context.store.dispatch({
-      type: LOAD_MY_INFO_REQUEST,
+      type: LOAD_HASHTAG_POSTS_REQUEST,
+      data: context.params.id,
     });
     context.store.dispatch(END);
     await context.store.sagaTask.toPromise();

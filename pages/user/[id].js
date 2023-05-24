@@ -22,11 +22,6 @@ const User = () => {
 
   useEffect(() => {
     function onScroll() {
-      console.log(
-        window.screenY,
-        document.documentElement.clientHeight,
-        document.documentElement.scrollHeight
-      );
       if (
         window.scrollY + document.documentElement.clientHeight >
         document.documentElement.scrollHeight - 300
@@ -45,19 +40,16 @@ const User = () => {
     return () => {
       window.removeEventListener("scroll", onScroll);
     };
-  }, [mainPosts.length, hasMorePost, id]);
+  }, [mainPosts.length, hasMorePost, id, loadPostsLoading]);
 
   return (
     <AppLayout>
       <Head>
-        <title>{userInfo.nickname}님의 글</title>
+        <title>{userInfo}님의 글</title>
 
-        <meta name="description" content={`${userInfo.nickname}님의 게시글`} />
-        <meta property="og:title" content={`${userInfo.nickname}님의 게시금`} />
-        <meta
-          property="og:description"
-          content={`${userInfo.nickname}님의 게시글`}
-        />
+        <meta name="description" content={`${userInfo}님의 게시글`} />
+        <meta property="og:title" content={`${userInfo}님의 게시금`} />
+        <meta property="og:description" content={`${userInfo}님의 게시글`} />
         <meta
           property="og:image"
           content={"https://nodebird.com/favicon.png"}
@@ -110,11 +102,11 @@ export const getServerSideProps = wrapper.getServerSideProps(
       data: context.params.id,
     });
     context.store.dispatch({
-      type: LOAD_USER_REQUEST,
-      data: context.params.id,
+      type: LOAD_MY_INFO_REQUEST,
     });
     context.store.dispatch({
-      type: LOAD_MY_INFO_REQUEST,
+      type: LOAD_USER_REQUEST,
+      data: context.params.id,
     });
     context.store.dispatch(END);
     await context.store.sagaTask.toPromise();

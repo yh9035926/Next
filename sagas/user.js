@@ -60,6 +60,7 @@ function* logIn(action) {
       data: result.data,
     });
   } catch (err) {
+    console.error(err);
     yield put({
       type: LOG_IN_FAILURE,
       error: err.response.data,
@@ -84,6 +85,7 @@ function* logOut() {
       type: LOG_OUT_SUCCESS,
     });
   } catch (err) {
+    console.error(err);
     yield put({
       type: LOG_OUT_FAILURE,
       error: err.response.data,
@@ -109,6 +111,7 @@ function* signUp(action) {
       type: SIGN_UP_SUCCESS,
     });
   } catch (err) {
+    console.error(err);
     yield put({
       type: SIGN_UP_FAILURE,
       error: err.response.data,
@@ -136,6 +139,7 @@ function* follow(action) {
       data: result.data,
     });
   } catch (err) {
+    console.error(err);
     yield put({
       type: FOLLOW_FAILURE,
       error: err.response.data,
@@ -162,6 +166,7 @@ function* unfollow(action) {
       data: result.data,
     });
   } catch (err) {
+    console.error(err);
     yield put({
       type: UNFOLLOW_FAILURE,
       error: err.response.data,
@@ -187,6 +192,7 @@ function* loadMyInfo(action) {
       data: result.data,
     });
   } catch (err) {
+    console.error(err);
     yield put({
       type: LOAD_MY_INFO_FAILURE,
       error: err.response.data,
@@ -212,6 +218,7 @@ function* loadUser(action) {
       data: result.data,
     });
   } catch (err) {
+    console.error(err);
     yield put({
       type: LOAD_USER_FAILURE,
       error: err.response.data,
@@ -236,6 +243,7 @@ function* loadFollowers(action) {
       data: result.data,
     });
   } catch (err) {
+    console.error(err);
     yield put({
       type: LOAD_FOLLOWERS_FAILURE,
       error: err.response.data,
@@ -260,6 +268,7 @@ function* loadFollowings(action) {
       data: result.data,
     });
   } catch (err) {
+    console.error(err);
     yield put({
       type: LOAD_FOLLOWINGS_FAILURE,
       error: err.response.data,
@@ -286,6 +295,7 @@ function* changeNickname(action) {
       data: result.data,
     });
   } catch (err) {
+    console.error(err);
     yield put({
       type: CHANGE_NICKNAME_FAILURE,
       error: err.response.data,
@@ -311,6 +321,7 @@ function* removeFollower(action) {
       data: result.data,
     });
   } catch (err) {
+    console.error(err);
     yield put({
       type: REMOVE_FOLLOWER_FAILURE,
       error: err.response.data,
