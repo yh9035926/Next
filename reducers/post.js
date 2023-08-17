@@ -136,6 +136,24 @@ const rootReducer = (state = initialState, action) => {
         break;
       //-------------------------------------------------------------------
 
+      case UNLIKE_POST_REQUEST:
+        draft.unlikePostLoading = true;
+        draft.unlikePostDone = false;
+        draft.unlikePostError = null;
+        break;
+      case UNLIKE_POST_SUCCESS: {
+        const post = draft.mainPosts.find((v) => v.id === action.data.PostId);
+        post.Likers = post.Likers.filter((v) => v.id !== action.data.UserId);
+        draft.unlikePostLoading = false;
+        draft.unlikePostDone = true;
+        break;
+      }
+      case UNLIKE_POST_FAILURE:
+        draft.unlikePostLoading = false;
+        draft.unlikePostError = action.error;
+        break;
+      //-------------------------------------------------------------------
+
       case LOAD_POSTS_REQUEST:
       case LOAD_USER_POSTS_REQUEST:
       case LOAD_HASHTAG_POSTS_REQUEST:
@@ -205,24 +223,7 @@ const rootReducer = (state = initialState, action) => {
         draft.uploadImagesLoading = false;
         draft.uploadImagesError = action.error;
         break;
-      //-------------------------------------------------------------------
 
-      case UNLIKE_POST_REQUEST:
-        draft.unlikePostLoading = true;
-        draft.unlikePostDone = false;
-        draft.unlikePostError = null;
-        break;
-      case UNLIKE_POST_SUCCESS: {
-        const post = draft.mainPosts.find((v) => v.id === action.data.PostId);
-        post.Likers = post.Likers.filter((v) => v.id !== action.data.UserId);
-        draft.unlikePostLoading = false;
-        draft.unlikePostDone = true;
-        break;
-      }
-      case UNLIKE_POST_FAILURE:
-        draft.unlikePostLoading = false;
-        draft.unlikePostError = action.error;
-        break;
       //-------------------------------------------------------------------
 
       case REMOVE_POST_REQUEST:
