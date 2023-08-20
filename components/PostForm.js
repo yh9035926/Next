@@ -33,14 +33,17 @@ const PostForm = () => {
         data: imageFormData,
       });
     });
-  });
+  }, []);
 
-  const onRemoveImage = useCallback((index) => () => {
-    dispatch({
-      type: REMOVE_IMAGE,
-      data: index,
-    });
-  });
+  const onRemoveImage = useCallback(
+    (index) => () => {
+      dispatch({
+        type: REMOVE_IMAGE,
+        data: index,
+      });
+    },
+    []
+  );
 
   const onSubmit = useCallback(() => {
     if (!text || !text.trim()) {
@@ -84,7 +87,7 @@ const PostForm = () => {
       <div>
         {imagePaths.map((v, i) => (
           <div key={v.id}>
-            <img src={`http://localhost:3065/${v}`} />
+            <img src={`http://localhost:3075/${v}`} />
             <div>
               <Button onClick={onRemoveImage(i)}>제거</Button>
             </div>
