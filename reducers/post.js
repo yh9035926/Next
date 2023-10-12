@@ -215,8 +215,8 @@ const rootReducer = (state = initialState, action) => {
         draft.uploadImagesError = null;
         break;
       case UPLOAD_IMAGES_SUCCESS:
-        draft.imagePaths = action.data;
         draft.uploadImagesLoading = false;
+        draft.imagePaths = action.data;
         draft.uploadImagesDone = true;
         break;
       case UPLOAD_IMAGES_FAILURE:
