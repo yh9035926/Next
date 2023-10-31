@@ -90,12 +90,12 @@ const Signup = () => {
           <Input value={nickname} onChange={onChangenickname} />
         </div>
         <div>
-          <label>비민번호</label>
+          <label>비밀번호</label>
           <br />
           <Input type="password" value={password} onChange={onChangePassword} />
         </div>
         <div>
-          <label>비민번호 체크</label>
+          <label>비밀번호 체크</label>
           <br />
           <Input
             type="password"
