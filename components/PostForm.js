@@ -11,9 +11,11 @@ const PostForm = () => {
   );
 
   const imageInput = useRef();
+
   const onClickImageUpload = useCallback(() => {
     imageInput.current.click();
   }, [imageInput.current]);
+  
   const dispatch = useDispatch();
   const [text, onChangeText, setText] = useInput();
 

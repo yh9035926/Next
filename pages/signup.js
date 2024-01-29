@@ -23,7 +23,7 @@ const Signup = () => {
 
   useEffect(() => {
     if (logInDone) {
-      Router.replace("/"); //뤼로가기 했을때 그 페이지 안 나옴
+      Router.replace("/"); //뒤로가기 했을때 그 페이지 안 나옴
     }
   }, [logInDone]);
 

@@ -25,6 +25,7 @@ const Profile = () => {
 
   const dispatch = useDispatch();
   const { me } = useSelector((state) => state.user);
+  
   const { data: followersData, followerError } = useSWR(
     `http://localhost:3075/user/followers?limit=${followersLimit}`,
     fetcher
